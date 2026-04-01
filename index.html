@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FTC Logistics — Buồng Lái Ban Lãnh Đạo</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg-0: #0a0d14;
+  --bg-1: #0f1420;
+  --bg-2: #161b2e;
+  --bg-3: #1e2540;
+  --bg-4: #252d4a;
+  --border: rgba(255,255,255,0.07);
+  --border-bright: rgba(255,255,255,0.14);
+  --text-1: #f0f4ff;
+  --text-2: #8b96b8;
+  --text-3: #5a6480;
+  --accent: #3b82f6;
+  --accent-dim: rgba(59,130,246,0.15);
+  --green: #10b981;
+  --green-dim: rgba(16,185,129,0.15);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.15);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.15);
+  --purple: #8b5cf6;
+  --purple-dim: rgba(139,92,246,0.15);
+  --teal: #14b8a6;
+  --teal-dim: rgba(20,184,166,0.15);
+  --font: 'Be Vietnam Pro', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg-0); color:var(--text-1); font-family:var(--font); font-size:13px; min-height:100vh; }
+
+/* HEADER */
+.header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 28px; border-bottom:1px solid var(--border);
+  background:var(--bg-1); position:sticky; top:0; z-index:100;
+}
+.logo { display:flex; align-items:center; gap:10px; }
+.logo-badge {
+  width:32px; height:32px; border-radius:8px;
+  background:linear-gradient(135deg,#1d4ed8,#3b82f6);
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:13px; color:#fff; letter-spacing:-0.5px;
+}
+.logo-name { font-weight:700; font-size:15px; color:var(--text-1); }
+.logo-sub { font-size:11px; color:var(--text-3); margin-top:1px; }
+.header-right { display:flex; align-items:center; gap:16px; }
+.live-badge {
+  display:flex; align-items:center; gap:6px;
+  background:var(--green-dim); border:1px solid rgba(16,185,129,0.3);
+  border-radius:20px; padding:4px 10px; font-size:11px; color:var(--green); font-weight:500;
+}
+.live-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.header-time { font-family:var(--mono); font-size:12px; color:var(--text-3); }
+.header-date { font-size:11px; color:var(--text-3); text-align:right; }
+
+/* NAV TABS */
+.nav { display:flex; gap:2px; padding:12px 28px 0; background:var(--bg-1); border-bottom:1px solid var(--border); overflow-x:auto; }
+.nav-tab {
+  padding:8px 16px; border-radius:8px 8px 0 0; font-size:12px; font-weight:500;
+  color:var(--text-3); cursor:pointer; border:1px solid transparent;
+  border-bottom:none; transition:all 0.2s; white-space:nowrap; background:transparent;
+}
+.nav-tab:hover { color:var(--text-2); background:var(--bg-2); }
+.nav-tab.active {
+  color:var(--text-1); background:var(--bg-2);
+  border-color:var(--border); border-bottom-color:var(--bg-2);
+}
+.nav-tab .tab-dot { width:5px; height:5px; border-radius:50%; display:inline-block; margin-right:6px; }
+
+/* LAYOUT */
+.main { padding:20px 28px; background:var(--bg-0); min-height:calc(100vh - 100px); }
+.panel { display:none; }
+.panel.active { display:block; }
+
+/* GRID LAYOUTS */
+.g4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+.g3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+.g2 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px; margin-bottom:16px; }
+.g21 { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:12px; margin-bottom:16px; }
+.g12 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.6fr); gap:12px; margin-bottom:16px; }
+.g13 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,3fr); gap:12px; margin-bottom:16px; }
+
+/* CARDS */
+.card {
+  background:var(--bg-2); border:1px solid var(--border);
+  border-radius:12px; padding:16px; overflow:hidden;
+}
+.card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.card-title { font-size:11px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.08em; }
+.card-action { font-size:11px; color:var(--accent); cursor:pointer; }
+
+/* METRIC CARDS */
+.metric { background:var(--bg-2); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; overflow:hidden; }
+.metric-label { font-size:11px; color:var(--text-3); font-weight:500; margin-bottom:8px; }
+.metric-value { font-size:26px; font-weight:700; color:var(--text-1); line-height:1; font-family:var(--mono); letter-spacing:-1px; }
+.metric-sub { font-size:11px; margin-top:6px; font-weight:500; }
+.metric-bar { height:2px; background:var(--bg-4); border-radius:2px; margin-top:12px; overflow:hidden; }
+.metric-bar-fill { height:100%; border-radius:2px; transition:width 1s; }
+.metric .accent-line { position:absolute; top:0; left:0; right:0; height:2px; }
+.up { color:var(--green); }
+.down { color:var(--red); }
+.warn { color:var(--amber); }
+.info { color:var(--accent); }
+
+/* SECTION HEADING */
+.section-label {
+  font-size:10px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--text-3); margin-bottom:10px; display:flex; align-items:center; gap:8px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* BADGES */
+.badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:20px; font-size:10px; font-weight:600; }
+.badge-red { background:var(--red-dim); color:var(--red); border:1px solid rgba(239,68,68,0.25); }
+.badge-green { background:var(--green-dim); color:var(--green); border:1px solid rgba(16,185,129,0.25); }
+.badge-amber { background:var(--amber-dim); color:var(--amber); border:1px solid rgba(245,158,11,0.25); }
+.badge-blue { background:var(--accent-dim); color:var(--accent); border:1px solid rgba(59,130,246,0.25); }
+.badge-purple { background:var(--purple-dim); color:var(--purple); border:1px solid rgba(139,92,246,0.25); }
+
+/* ALERT ROWS */
+.alert-list { display:flex; flex-direction:column; gap:1px; }
+.alert-row {
+  display:flex; align-items:flex-start; gap:10px; padding:10px 12px;
+  border-radius:8px; transition:background 0.15s; cursor:default;
+}
+.alert-row:hover { background:var(--bg-3); }
+.alert-dot { width:7px; height:7px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+.dot-r { background:var(--red); box-shadow:0 0 6px var(--red); }
+.dot-a { background:var(--amber); box-shadow:0 0 6px var(--amber); }
+.dot-g { background:var(--green); box-shadow:0 0 6px var(--green); }
+.dot-b { background:var(--accent); }
+.alert-content { flex:1; min-width:0; }
+.alert-text { font-size:12px; color:var(--text-1); line-height:1.5; }
+.alert-meta { font-size:11px; color:var(--text-3); margin-top:2px; }
+.alert-right { flex-shrink:0; }
+
+/* TABLE */
+.tbl { width:100%; border-collapse:collapse; }
+.tbl th { font-size:10px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.06em; padding:6px 8px; border-bottom:1px solid var(--border); text-align:left; }
+.tbl td { padding:9px 8px; border-bottom:1px solid var(--border); font-size:12px; color:var(--text-1); }
+.tbl tr:last-child td { border-bottom:none; }
+.tbl tr:hover td { background:var(--bg-3); }
+.tbl .mono { font-family:var(--mono); font-size:11px; }
+
+/* BAR CHARTS */
+.bar-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.bar-lbl { font-size:11px; color:var(--text-2); width:72px; text-align:right; flex-shrink:0; }
+.bar-bg { flex:1; background:var(--bg-4); border-radius:3px; height:6px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:3px; transition:width 1s 0.3s; }
+.bar-val { font-size:11px; font-weight:600; font-family:var(--mono); width:48px; color:var(--text-1); }
+
+/* PROGRESS */
+.prog-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.prog-name { font-size:12px; color:var(--text-2); width:100px; flex-shrink:0; }
+.prog-bg { flex:1; background:var(--bg-4); border-radius:3px; height:5px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:3px; transition:width 1s 0.5s; }
+.prog-val { font-size:11px; font-weight:600; font-family:var(--mono); width:36px; text-align:right; flex-shrink:0; }
+
+/* FUNNEL */
+.funnel-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.funnel-lbl { font-size:11px; color:var(--text-3); width:110px; text-align:right; flex-shrink:0; }
+.funnel-bg { flex:1; background:var(--bg-4); border-radius:3px; height:18px; overflow:hidden; }
+.funnel-fill { height:100%; border-radius:3px; display:flex; align-items:center; padding-left:8px; font-size:10px; font-weight:600; transition:width 1s 0.3s; }
+.funnel-n { font-size:11px; font-weight:700; font-family:var(--mono); width:32px; text-align:right; flex-shrink:0; color:var(--text-1); }
+
+/* STATUS PILL */
+.status { display:flex; align-items:center; gap:5px; }
+.status-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+/* RISK CARD */
+.risk-card {
+  background:var(--bg-3); border:1px solid var(--border);
+  border-radius:10px; padding:12px 14px; display:flex;
+  align-items:flex-start; gap:12px; margin-bottom:8px;
+}
+.risk-icon { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; }
+.risk-title { font-size:12px; font-weight:600; color:var(--text-1); margin-bottom:3px; }
+.risk-desc { font-size:11px; color:var(--text-3); line-height:1.5; }
+.risk-val { font-family:var(--mono); font-size:16px; font-weight:700; margin-left:auto; flex-shrink:0; text-align:right; }
+.risk-val-sub { font-size:10px; font-weight:400; color:var(--text-3); }
+
+/* SPARKLINE AREA */
+.spark-container { position:relative; height:48px; margin-top:8px; }
+
+/* CHART WRAPPER */
+.chart-wrap { position:relative; width:100%; }
+
+/* KPIROW */
+.kpi-row { display:flex; gap:12px; margin-bottom:16px; overflow-x:auto; padding-bottom:4px; }
+.kpi-item { background:var(--bg-3); border:1px solid var(--border); border-radius:10px; padding:12px 16px; flex-shrink:0; min-width:140px; }
+.kpi-label { font-size:10px; color:var(--text-3); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+.kpi-val { font-size:20px; font-weight:700; font-family:var(--mono); color:var(--text-1); }
+.kpi-delta { font-size:11px; margin-top:4px; font-weight:500; }
+
+/* TIMELINE */
+.timeline { position:relative; padding-left:20px; }
+.timeline::before { content:''; position:absolute; left:6px; top:4px; bottom:4px; width:1px; background:var(--border); }
+.tl-item { position:relative; margin-bottom:14px; }
+.tl-dot { position:absolute; left:-17px; top:4px; width:8px; height:8px; border-radius:50%; border:2px solid var(--bg-2); }
+.tl-time { font-size:10px; color:var(--text-3); font-family:var(--mono); }
+.tl-text { font-size:12px; color:var(--text-1); margin-top:2px; }
+.tl-sub { font-size:11px; color:var(--text-3); }
+
+/* BRANCH CARD */
+.branch-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
+.branch-item:last-child { border-bottom:none; }
+.branch-name { font-size:12px; color:var(--text-2); }
+.branch-vals { display:flex; gap:16px; align-items:center; }
+.branch-val { font-size:12px; font-weight:600; font-family:var(--mono); }
+
+/* GAUGE */
+.gauge-wrap { display:flex; justify-content:center; margin:8px 0; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background:var(--bg-1); }
+::-webkit-scrollbar-thumb { background:var(--bg-4); border-radius:4px; }
+
+/* FOOTER NOTE */
+.powered { padding:12px 28px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.powered-txt { font-size:10px; color:var(--text-3); }
+.base-badge { font-size:10px; color:var(--accent); font-weight:600; background:var(--accent-dim); padding:2px 8px; border-radius:4px; }
+
+/* HIGHLIGHT BOX */
+.highlight { background:var(--bg-3); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:10px 14px; margin-top:12px; }
+.highlight.red { border-left-color:var(--red); }
+.highlight.green { border-left-color:var(--green); }
+.highlight.amber { border-left-color:var(--amber); }
+.highlight-text { font-size:12px; color:var(--text-2); line-height:1.6; }
+
+/* OVERVIEW STRIP */
+.overview-strip { display:flex; gap:8px; margin-bottom:16px; padding:10px 14px; background:var(--bg-2); border:1px solid var(--border); border-radius:10px; align-items:center; flex-wrap:wrap; }
+.strip-item { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-2); }
+.strip-sep { width:1px; height:14px; background:var(--border-bright); margin:0 4px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-badge">FTC</div>
+    <div>
+      <div class="logo-name">FTC Logistics — Buồng Lái Ban Lãnh Đạo</div>
+      <div class="logo-sub">Tổng quan vận hành · 5 chi nhánh · Cập nhật real-time</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div>
+      <div class="header-time" id="clock">--:--:--</div>
+      <div class="header-date" id="date-display">Thứ Năm, 01/04/2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-tab active" onclick="showPanel('p1',this)"><span class="tab-dot" style="background:#3b82f6"></span>Tổng Quan Lãnh Đạo</div>
+  <div class="nav-tab" onclick="showPanel('p2',this)"><span class="tab-dot" style="background:#ef4444"></span>Điểm Nóng Rủi Ro</div>
+  <div class="nav-tab" onclick="showPanel('p3',this)"><span class="tab-dot" style="background:#10b981"></span>Doanh Thu & Lợi Nhuận</div>
+  <div class="nav-tab" onclick="showPanel('p4',this)"><span class="tab-dot" style="background:#f59e0b"></span>Chi Phí & Ẩn Phí</div>
+  <div class="nav-tab" onclick="showPanel('p5',this)"><span class="tab-dot" style="background:#8b5cf6"></span>Hiệu Suất Vận Hành</div>
+  <div class="nav-tab" onclick="showPanel('p6',this)"><span class="tab-dot" style="background:#14b8a6"></span>Nhân Sự & Tổ Chức</div>
+</div>
+
+<div class="main">
+
+<!-- =================== PANEL 1: TỔNG QUAN =================== -->
+<div class="panel active" id="p1">
+  <div class="overview-strip">
+    <div class="strip-item"><span style="color:var(--green)">●</span> FTC đang vận hành bình thường</div>
+    <div class="strip-sep"></div>
+    <div class="strip-item">Tháng 04/2026 · Ngày làm việc thứ 1/22</div>
+    <div class="strip-sep"></div>
+    <div class="strip-item warn">⚠ 3 cảnh báo DEM/DET cần xử lý hôm nay</div>
+    <div class="strip-sep"></div>
+    <div class="strip-item down">● 7 báo giá đang quá SLA 4h</div>
+  </div>
+
+  <div class="g4">
+    <div class="metric">
+      <div class="accent-line" style="background:var(--green)"></div>
+      <div class="metric-label">Doanh thu tháng 4</div>
+      <div class="metric-value">4.2 tỷ</div>
+      <div class="metric-sub up">↑ 18% so tháng 3</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:62%;background:var(--green)"></div></div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:4px">Mục tiêu: 6.8 tỷ · Đạt 62%</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--accent)"></div>
+      <div class="metric-label">Lô hàng đang xử lý</div>
+      <div class="metric-value">138</div>
+      <div class="metric-sub warn">↑ 12 lô rủi ro DEM/DET</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:84%;background:var(--accent)"></div></div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:4px">Đúng tiến độ: 116 · Trễ: 22</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--amber)"></div>
+      <div class="metric-label">Tỷ lệ chuyển đổi báo giá</div>
+      <div class="metric-value">38%</div>
+      <div class="metric-sub up">↑ 8% so baseline</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:38%;background:var(--amber)"></div></div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:4px">94 RFQ · 36 booking · 13 thua</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--red)"></div>
+      <div class="metric-label">Báo giá quá SLA 4h</div>
+      <div class="metric-value">7</div>
+      <div class="metric-sub down">Cần xử lý ngay hôm nay</div>
+      <div class="metric-bar"><div class="metric-bar-fill" style="width:70%;background:var(--red)"></div></div>
+      <div style="font-size:10px;color:var(--text-3);margin-top:4px">3 báo giá trễ >3h, nguy cơ mất đơn</div>
+    </div>
+  </div>
+
+  <div class="g21">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Doanh thu 6 tháng gần nhất</div>
+        <div style="display:flex;gap:8px">
+          <span class="badge badge-blue">Forwarder</span>
+          <span class="badge badge-green">Kho ICD</span>
+          <span class="badge badge-purple">Xây dựng</span>
+        </div>
+      </div>
+      <div class="chart-wrap" style="height:200px">
+        <canvas id="chartRevenue"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Doanh thu theo chi nhánh · T4/2026</div>
+      </div>
+      <div class="bar-row"><div class="bar-lbl">Hà Nội</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--accent)"></div></div><div class="bar-val info">1.8 tỷ</div></div>
+      <div class="bar-row"><div class="bar-lbl">Hải Phòng</div><div class="bar-bg"><div class="bar-fill" style="width:77%;background:var(--green)"></div></div><div class="bar-val up">1.4 tỷ</div></div>
+      <div class="bar-row"><div class="bar-lbl">TP.HCM</div><div class="bar-bg"><div class="bar-fill" style="width:39%;background:var(--purple)"></div></div><div class="bar-val" style="color:var(--purple)">0.7 tỷ</div></div>
+      <div class="bar-row"><div class="bar-lbl">Việt Trì</div><div class="bar-bg"><div class="bar-fill" style="width:11%;background:var(--amber)"></div></div><div class="bar-val warn">0.2 tỷ</div></div>
+      <div class="bar-row"><div class="bar-lbl">Vĩnh Phúc</div><div class="bar-bg"><div class="bar-fill" style="width:5%;background:var(--text-3)"></div></div><div class="bar-val" style="color:var(--text-3)">0.1 tỷ</div></div>
+      <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
+        <div class="card-title" style="margin-bottom:10px">Theo loại dịch vụ</div>
+        <div class="bar-row"><div class="bar-lbl">Forwarder</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--accent)"></div></div><div class="bar-val info">62%</div></div>
+        <div class="bar-row"><div class="bar-lbl">Kho ICD</div><div class="bar-bg"><div class="bar-fill" style="width:39%;background:var(--green)"></div></div><div class="bar-val up">24%</div></div>
+        <div class="bar-row"><div class="bar-lbl">Xây dựng</div><div class="bar-bg"><div class="bar-fill" style="width:23%;background:var(--text-3)"></div></div><div class="bar-val" style="color:var(--text-3)">14%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Cảnh báo ưu tiên cao cần xử lý ngay</div></div>
+      <div class="alert-list">
+        <div class="alert-row">
+          <div class="alert-dot dot-r"></div>
+          <div class="alert-content">
+            <div class="alert-text">Lô FTC-2406-089 phát sinh phí DEM hôm nay — container tại Hải Phòng</div>
+            <div class="alert-meta">Container TCKU3429871 · Free time: 0 ngày · Ước tính: ~3.2 triệu</div>
+          </div>
+          <div class="alert-right"><span class="badge badge-red">Khẩn</span></div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-dot dot-r"></div>
+          <div class="alert-content">
+            <div class="alert-text">3 báo giá đang trễ SLA >3h — Posco Vietnam, LG Innotek, Samsung Vina</div>
+            <div class="alert-meta">Sales: Đỗ Trang, Phạm Duy · Nguy cơ mất đơn ngay hôm nay</div>
+          </div>
+          <div class="alert-right"><span class="badge badge-red">Ngay</span></div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-dot dot-a"></div>
+          <div class="alert-content">
+            <div class="alert-text">Kho ngoại quan Hải Phòng đạt 87% công suất — cần điều phối xuất kho</div>
+            <div class="alert-meta">100.000m² · Hàng tồn tăng 23% so tháng trước</div>
+          </div>
+          <div class="alert-right"><span class="badge badge-amber">Cảnh báo</span></div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-dot dot-a"></div>
+          <div class="alert-content">
+            <div class="alert-text">5 nhân viên chưa chấm công hôm nay — 2 HN, 2 HP, 1 HCM</div>
+            <div class="alert-meta">Bao gồm 1 nhân viên Ops đang phụ trách lô hàng trễ</div>
+          </div>
+          <div class="alert-right"><span class="badge badge-amber">Xác nhận</span></div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-dot dot-r"></div>
+          <div class="alert-content">
+            <div class="alert-text">Rủi ro kép: Lô FTC-074 sắp DEM + nhân viên phụ trách đang nghỉ phép</div>
+            <div class="alert-meta">Anh Minh (Ops) — nghỉ phép đến ngày 03/04 · Chưa có người thay thế</div>
+          </div>
+          <div class="alert-right"><span class="badge badge-red">Rủi ro kép</span></div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-dot dot-a"></div>
+          <div class="alert-content">
+            <div class="alert-text">Khách Hyundai MM chưa có đơn hàng trong 45 ngày — cần Sales liên hệ</div>
+            <div class="alert-meta">Khách VIP · Doanh thu TB 280 triệu/tháng · Nguy cơ chuyển sang đối thủ</div>
+          </div>
+          <div class="alert-right"><span class="badge badge-amber">Theo dõi</span></div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-dot dot-g"></div>
+          <div class="alert-content">
+            <div class="alert-text">Hợp đồng Q2 với Lotte Chemical vừa được ký — 680 triệu/quý</div>
+            <div class="alert-meta">Sales Hải Phòng · Bắt đầu từ 05/04/2026</div>
+          </div>
+          <div class="alert-right"><span class="badge badge-green">Tốt</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Hoạt động gần nhất</div></div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--red)"></div>
+          <div class="tl-time">08:45 hôm nay</div>
+          <div class="tl-text">Lô FTC-089 nhận cảnh báo DEM tự động</div>
+          <div class="tl-sub">Ops Hải Phòng được thông báo · Đang xử lý</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--green)"></div>
+          <div class="tl-time">08:12 hôm nay</div>
+          <div class="tl-text">Lô FTC-081 hoàn thành thông quan — đúng hạn</div>
+          <div class="tl-sub">Samsung SDI · Cảng Hải Phòng</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--amber)"></div>
+          <div class="tl-time">07:30 hôm nay</div>
+          <div class="tl-text">Sales Đỗ Trang nhận RFQ từ Posco Vietnam — chưa phản hồi</div>
+          <div class="tl-sub">Đã qua 1.5h · SLA còn 2.5h</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--green)"></div>
+          <div class="tl-time">Hôm qua 17:22</div>
+          <div class="tl-text">Hợp đồng Lotte Chemical Q2 được ký duyệt</div>
+          <div class="tl-sub">680 triệu · Trưởng phòng Sale phê duyệt</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--accent)"></div>
+          <div class="tl-time">Hôm qua 15:00</div>
+          <div class="tl-text">Kho Hải Phòng cập nhật công suất 87%</div>
+          <div class="tl-sub">Đề xuất điều phối xuất kho đã được gửi lên</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot" style="background:var(--text-3)"></div>
+          <div class="tl-time">Hôm qua 09:15</div>
+          <div class="tl-text">36 booking mới được xác nhận trong tuần</div>
+          <div class="tl-sub">Tỷ lệ chuyển đổi 38% · Tốt hơn tháng trước 8%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== PANEL 2: RỦI RO =================== -->
+<div class="panel" id="p2">
+  <div class="g4">
+    <div class="metric">
+      <div class="accent-line" style="background:var(--red)"></div>
+      <div class="metric-label">Lô hàng rủi ro DEM/DET</div>
+      <div class="metric-value">12</div>
+      <div class="metric-sub down">3 lô cần xử lý trong 24h</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--red)"></div>
+      <div class="metric-label">Thiệt hại DEM/DET ước tính</div>
+      <div class="metric-value">~42tr</div>
+      <div class="metric-sub down">Nếu không xử lý kịp hôm nay</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--amber)"></div>
+      <div class="metric-label">Rủi ro phụ thuộc khách hàng</div>
+      <div class="metric-value">41%</div>
+      <div class="metric-sub warn">Top 3 KH chiếm 41% doanh thu</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--amber)"></div>
+      <div class="metric-label">Lô hàng đang trễ tiến độ</div>
+      <div class="metric-value">22</div>
+      <div class="metric-sub warn">16% tổng lô đang xử lý</div>
+    </div>
+  </div>
+
+  <div class="g21">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Danh sách DEM/DET — ưu tiên xử lý</div></div>
+      <table class="tbl">
+        <tr>
+          <th>Mã lô</th><th>Container</th><th>Tuyến</th><th>Free time</th><th>Est. Phí</th><th>Ops phụ trách</th><th>Trạng thái</th>
+        </tr>
+        <tr>
+          <td class="mono">FTC-089</td><td class="mono">TCKU3429</td><td>HP → Seoul</td>
+          <td style="color:var(--red);font-weight:700">0 ngày</td>
+          <td class="mono down">~3.2tr</td><td>Nguyễn Bình</td>
+          <td><span class="badge badge-red">Khẩn cấp</span></td>
+        </tr>
+        <tr>
+          <td class="mono">FTC-074</td><td class="mono">MSCU8821</td><td>HN → Singapore</td>
+          <td style="color:var(--red);font-weight:600">1 ngày</td>
+          <td class="mono down">~2.8tr</td><td><span style="color:var(--amber)">Minh (nghỉ phép)</span></td>
+          <td><span class="badge badge-red">Rủi ro kép</span></td>
+        </tr>
+        <tr>
+          <td class="mono">FTC-081</td><td class="mono">HLCU4410</td><td>HP → Tokyo</td>
+          <td style="color:var(--amber);font-weight:600">2 ngày</td>
+          <td class="mono warn">~2.1tr</td><td>Trần Hoa</td>
+          <td><span class="badge badge-amber">Cảnh báo</span></td>
+        </tr>
+        <tr>
+          <td class="mono">FTC-092</td><td class="mono">YMLU7733</td><td>HCM → Hamburg</td>
+          <td>3 ngày</td><td class="mono">~1.5tr</td><td>Lê Cường</td>
+          <td><span class="badge badge-blue">Theo dõi</span></td>
+        </tr>
+        <tr>
+          <td class="mono">FTC-068</td><td class="mono">OOLU9912</td><td>HP → Busan</td>
+          <td>3 ngày</td><td class="mono">~1.2tr</td><td>Phạm Lan</td>
+          <td><span class="badge badge-blue">Theo dõi</span></td>
+        </tr>
+        <tr>
+          <td class="mono">FTC-077</td><td class="mono">CSNU4421</td><td>HN → Rotterdam</td>
+          <td>5 ngày</td><td class="mono">~0.8tr</td><td>Đỗ Quang</td>
+          <td><span class="badge badge-blue">Bình thường</span></td>
+        </tr>
+      </table>
+      <div class="highlight red" style="margin-top:12px">
+        <div class="highlight-text">Lô FTC-074 là <strong>rủi ro kép</strong>: sắp DEM trong 1 ngày nhưng nhân viên phụ trách đang nghỉ phép đến 03/04. Cần phân công người thay thế ngay hôm nay.</div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-header"><div class="card-title">DEM/DET theo tháng (triệu đồng)</div></div>
+        <div class="chart-wrap" style="height:130px">
+          <canvas id="chartDEM"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Rủi ro phụ thuộc khách hàng</div></div>
+        <div class="bar-row"><div class="bar-lbl">Samsung SDI</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><div class="bar-val down">18%</div></div>
+        <div class="bar-row"><div class="bar-lbl">Lotte Chem</div><div class="bar-bg"><div class="bar-fill" style="width:72%;background:var(--amber)"></div></div><div class="bar-val warn">13%</div></div>
+        <div class="bar-row"><div class="bar-lbl">Hyundai MM</div><div class="bar-bg"><div class="bar-fill" style="width:55%;background:var(--amber)"></div></div><div class="bar-val warn">10%</div></div>
+        <div class="bar-row"><div class="bar-lbl">LG Innotek</div><div class="bar-bg"><div class="bar-fill" style="width:44%;background:var(--accent)"></div></div><div class="bar-val info">8%</div></div>
+        <div class="bar-row"><div class="bar-lbl">Posco VN</div><div class="bar-bg"><div class="bar-fill" style="width:33%;background:var(--accent)"></div></div><div class="bar-val info">6%</div></div>
+        <div class="highlight amber">
+          <div class="highlight-text">Top 3 khách chiếm 41% doanh thu — nếu mất 1 khách là mất 10-18% doanh thu ngay lập tức.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Rủi ro tuân thủ pháp lý</div></div>
+      <div class="risk-card">
+        <div class="risk-icon" style="background:var(--red-dim)">🏭</div>
+        <div><div class="risk-title">Kho ngoại quan HP</div><div class="risk-desc">3 lô hàng chưa cập nhật hồ sơ điện tử. Deadline hải quan: 03/04</div></div>
+        <div><div class="risk-val down">3</div><div class="risk-val-sub">lô hàng</div></div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon" style="background:var(--amber-dim)">⚗️</div>
+        <div><div class="risk-title">Kho hóa chất Vĩnh Phúc</div><div class="risk-desc">Giấy phép lưu trữ hóa chất gia hạn tháng 05 — cần chuẩn bị hồ sơ</div></div>
+        <div><div class="risk-val warn">27</div><div class="risk-val-sub">ngày còn lại</div></div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon" style="background:var(--green-dim)">📋</div>
+        <div><div class="risk-title">Khai báo hải quan điện tử</div><div class="risk-desc">98% đơn khai báo đúng hạn trong tháng 3 — mức tốt</div></div>
+        <div><div class="risk-val up">98%</div><div class="risk-val-sub">đúng hạn</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Rủi ro nhân sự chủ chốt</div></div>
+      <div class="risk-card">
+        <div class="risk-icon" style="background:var(--red-dim)">👤</div>
+        <div><div class="risk-title">Trưởng phòng Sale — chưa có người</div><div class="risk-desc">Vị trí đang tuyển, đội sale đang vận hành thiếu người dẫn dắt</div></div>
+        <div><div class="risk-val down">0</div><div class="risk-val-sub">ứng viên</div></div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon" style="background:var(--amber-dim)">📊</div>
+        <div><div class="risk-title">Data khách hàng trong đầu Sales</div><div class="risk-desc">3 Sales cao cấp đang nắm data khách không có trong hệ thống</div></div>
+        <div><div class="risk-val warn">3</div><div class="risk-val-sub">người</div></div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon" style="background:var(--amber-dim)">🔄</div>
+        <div><div class="risk-title">Turnover 6 tháng gần nhất</div><div class="risk-desc">4 nhân viên nghỉ việc, trong đó 2 người từ bộ phận Ops</div></div>
+        <div><div class="risk-val warn">4</div><div class="risk-val-sub">người nghỉ</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Rủi ro giá cước không đồng nhất</div></div>
+      <div style="margin-bottom:12px;font-size:12px;color:var(--text-2);line-height:1.7">
+        Khi khách hàng liên hệ <strong>2 chi nhánh khác nhau</strong>, có nguy cơ nhận 2 báo giá khác nhau cho cùng 1 tuyến. Với FTC có 5 chi nhánh dùng Zalo/Excel, điều này đang xảy ra thường xuyên.
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon" style="background:var(--red-dim)">⚡</div>
+        <div><div class="risk-title">HN vs HCM — tuyến TP.HCM → Busan</div><div class="risk-desc">HN báo 18.5 triệu · HCM báo 17.2 triệu — chênh 1.3 triệu</div></div>
+        <div><div class="risk-val down">-7%</div><div class="risk-val-sub">chênh lệch</div></div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-icon" style="background:var(--amber-dim)">⚡</div>
+        <div><div class="risk-title">HP vs HN — tuyến Hà Nội → Rotterdam</div><div class="risk-desc">HP báo 42tr · HN báo 44tr — khách đã phát hiện và phàn nàn</div></div>
+        <div><div class="risk-val warn">-5%</div><div class="risk-val-sub">chênh lệch</div></div>
+      </div>
+      <div class="highlight red">
+        <div class="highlight-text">Đây là rủi ro uy tín nghiêm trọng nhất — khách hàng quốc tế rất nhạy cảm với điều này.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== PANEL 3: DOANH THU =================== -->
+<div class="panel" id="p3">
+  <div class="g4">
+    <div class="metric">
+      <div class="accent-line" style="background:var(--green)"></div>
+      <div class="metric-label">Doanh thu tháng 4</div>
+      <div class="metric-value">4.2 tỷ</div>
+      <div class="metric-sub up">↑ 18% so T3 · Đạt 62% mục tiêu</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--green)"></div>
+      <div class="metric-label">Lợi nhuận gộp ước tính</div>
+      <div class="metric-value">630tr</div>
+      <div class="metric-sub up">Biên LN: ~15% · T3 là 12%</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--amber)"></div>
+      <div class="metric-label">Doanh thu / Nhân viên</div>
+      <div class="metric-value">39.3tr</div>
+      <div class="metric-sub up">↑ 11% — hiệu suất cải thiện</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--accent)"></div>
+      <div class="metric-label">Khách hàng có đơn tháng này</div>
+      <div class="metric-value">67</div>
+      <div class="metric-sub warn">12 KH lặp lại · 55 KH mới</div>
+    </div>
+  </div>
+
+  <div class="g21">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Doanh thu & Lợi nhuận theo tháng</div></div>
+      <div class="chart-wrap" style="height:210px">
+        <canvas id="chartPnL"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Hiệu suất Sales — T4/2026</div></div>
+      <div class="prog-row">
+        <div class="prog-name">Nguyễn Minh</div>
+        <div class="prog-bg"><div class="prog-fill" style="width:88%;background:var(--green)"></div></div>
+        <div class="prog-val up">88%</div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-name">Trần Hoa</div>
+        <div class="prog-bg"><div class="prog-fill" style="width:72%;background:var(--green)"></div></div>
+        <div class="prog-val up">72%</div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-name">Lê Cường</div>
+        <div class="prog-bg"><div class="prog-fill" style="width:61%;background:var(--accent)"></div></div>
+        <div class="prog-val info">61%</div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-name">Phạm Duy</div>
+        <div class="prog-bg"><div class="prog-fill" style="width:44%;background:var(--amber)"></div></div>
+        <div class="prog-val warn">44%</div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-name">Đỗ Trang</div>
+        <div class="prog-bg"><div class="prog-fill" style="width:31%;background:var(--red)"></div></div>
+        <div class="prog-val down">31%</div>
+      </div>
+      <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
+        <div class="card-title" style="margin-bottom:10px">Pipeline báo giá tháng này</div>
+        <div class="funnel-row"><div class="funnel-lbl">Tiếp nhận RFQ</div><div class="funnel-bg"><div class="funnel-fill" style="width:100%;background:rgba(59,130,246,0.5);color:#93c5fd">94</div></div><div class="funnel-n">94</div></div>
+        <div class="funnel-row"><div class="funnel-lbl">Đã báo giá</div><div class="funnel-bg"><div class="funnel-fill" style="width:52%;background:rgba(139,92,246,0.5);color:#c4b5fd">49</div></div><div class="funnel-n">49</div></div>
+        <div class="funnel-row"><div class="funnel-lbl">Chốt booking</div><div class="funnel-bg"><div class="funnel-fill" style="width:38%;background:rgba(16,185,129,0.5);color:#6ee7b7">36</div></div><div class="funnel-n">36</div></div>
+        <div class="funnel-row"><div class="funnel-lbl">Thua (mất đơn)</div><div class="funnel-bg"><div class="funnel-fill" style="width:14%;background:rgba(239,68,68,0.5);color:#fca5a5">13</div></div><div class="funnel-n">13</div></div>
+      </div>
+      <div class="highlight red">
+        <div class="highlight-text">9/13 đơn thua do phản hồi báo giá chậm hơn đối thủ. Đây là doanh thu trực tiếp đang mất mỗi tháng.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Top 10 khách hàng — Doanh thu T4</div></div>
+      <table class="tbl">
+        <tr><th>Khách hàng</th><th>Loại hình</th><th>T4/2026</th><th>Trend</th><th>Trạng thái</th></tr>
+        <tr><td>Samsung SDI Vietnam</td><td>FDI Hàn</td><td class="mono">756tr</td><td class="up">↑ 12%</td><td><span class="badge badge-green">Ổn định</span></td></tr>
+        <tr><td>Lotte Chemical VN</td><td>FDI Hàn</td><td class="mono">547tr</td><td class="up">↑ 8%</td><td><span class="badge badge-green">Vừa ký Q2</span></td></tr>
+        <tr><td>Hyundai MM</td><td>FDI Hàn</td><td class="mono">420tr</td><td class="down">↓ 45 ngày im lặng</td><td><span class="badge badge-red">Nguy cơ</span></td></tr>
+        <tr><td>LG Innotek</td><td>FDI Hàn</td><td class="mono">336tr</td><td class="up">↑ 5%</td><td><span class="badge badge-green">Ổn định</span></td></tr>
+        <tr><td>Posco Vietnam</td><td>FDI Hàn</td><td class="mono">252tr</td><td class="warn">→ Ổn định</td><td><span class="badge badge-blue">Theo dõi</span></td></tr>
+        <tr><td>Vinfast Export</td><td>Nội địa</td><td class="mono">210tr</td><td class="up">↑ 34% — mới</td><td><span class="badge badge-blue">Tiềm năng</span></td></tr>
+        <tr><td>Tập đoàn Đèo Cả</td><td>Nội địa</td><td class="mono">168tr</td><td class="warn">→ Đều đặn</td><td><span class="badge badge-green">Ổn định</span></td></tr>
+        <tr><td>Nestle Vietnam</td><td>FDI EU</td><td class="mono">147tr</td><td class="up">↑ 9%</td><td><span class="badge badge-green">Ổn định</span></td></tr>
+        <tr><td>Panasonic VN</td><td>FDI Nhật</td><td class="mono">126tr</td><td class="down">↓ 18%</td><td><span class="badge badge-amber">Cần chăm sóc</span></td></tr>
+        <tr><td>Tôn Hoa Sen</td><td>Nội địa</td><td class="mono">105tr</td><td class="up">↑ 22%</td><td><span class="badge badge-blue">Đang tăng</span></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Doanh thu theo tuyến vận tải</div></div>
+      <div class="bar-row"><div class="bar-lbl">VN → Hàn Quốc</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--accent)"></div></div><div class="bar-val info">38%</div></div>
+      <div class="bar-row"><div class="bar-lbl">VN → Nhật Bản</div><div class="bar-bg"><div class="bar-fill" style="width:60%;background:var(--purple)"></div></div><div class="bar-val" style="color:var(--purple)">23%</div></div>
+      <div class="bar-row"><div class="bar-lbl">VN → EU</div><div class="bar-bg"><div class="bar-fill" style="width:42%;background:var(--green)"></div></div><div class="bar-val up">16%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Nội địa B-N</div><div class="bar-bg"><div class="bar-fill" style="width:34%;background:var(--amber)"></div></div><div class="bar-val warn">13%</div></div>
+      <div class="bar-row"><div class="bar-lbl">VN → Bắc Mỹ</div><div class="bar-bg"><div class="bar-fill" style="width:21%;background:var(--teal)"></div></div><div class="bar-val" style="color:var(--teal)">8%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Khác</div><div class="bar-bg"><div class="bar-fill" style="width:5%;background:var(--text-3)"></div></div><div class="bar-val" style="color:var(--text-3)">2%</div></div>
+      <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px">
+        <div class="card-title" style="margin-bottom:12px">Lợi nhuận ước tính theo tuyến</div>
+        <div class="bar-row"><div class="bar-lbl">VN → Hàn</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--green)"></div></div><div class="bar-val up">18%</div></div>
+        <div class="bar-row"><div class="bar-lbl">VN → EU</div><div class="bar-bg"><div class="bar-fill" style="width:88%;background:var(--green)"></div></div><div class="bar-val up">16%</div></div>
+        <div class="bar-row"><div class="bar-lbl">VN → Nhật</div><div class="bar-bg"><div class="bar-fill" style="width:72%;background:var(--amber)"></div></div><div class="bar-val warn">13%</div></div>
+        <div class="bar-row"><div class="bar-lbl">Nội địa B-N</div><div class="bar-bg"><div class="bar-fill" style="width:44%;background:var(--amber)"></div></div><div class="bar-val warn">8%</div></div>
+        <div class="bar-row"><div class="bar-lbl">VN → Bắc Mỹ</div><div class="bar-bg"><div class="bar-fill" style="width:22%;background:var(--red)"></div></div><div class="bar-val down">4%</div></div>
+        <div class="highlight amber">
+          <div class="highlight-text">Tuyến Bắc Mỹ có doanh thu 8% nhưng biên LN chỉ 4% — thấp nhất. Cần xem lại cơ cấu chi phí tuyến này.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== PANEL 4: CHI PHÍ =================== -->
+<div class="panel" id="p4">
+  <div class="g4">
+    <div class="metric">
+      <div class="accent-line" style="background:var(--red)"></div>
+      <div class="metric-label">Chi phí DEM/DET tháng 3</div>
+      <div class="metric-value">87tr</div>
+      <div class="metric-sub down">↑ 23% so T2 — xu hướng xấu</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--amber)"></div>
+      <div class="metric-label">Chi phí OT nhân sự</div>
+      <div class="metric-value">18.5tr</div>
+      <div class="metric-sub warn">412h OT · HP chiếm 58%</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--amber)"></div>
+      <div class="metric-label">Chi phí rework / sai sót</div>
+      <div class="metric-value">12.3tr</div>
+      <div class="metric-sub warn">14 lô làm lại hồ sơ · T3</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--accent)"></div>
+      <div class="metric-label">Công suất kho ICD trung bình</div>
+      <div class="metric-value">73%</div>
+      <div class="metric-sub warn">HP: 87% · Việt Trì: 52%</div>
+    </div>
+  </div>
+
+  <div class="g21">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Chi phí vận hành theo tháng (triệu đồng)</div></div>
+      <div class="chart-wrap" style="height:210px">
+        <canvas id="chartCost"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Phân tích chi phí ẩn tháng 3</div></div>
+      <div class="bar-row"><div class="bar-lbl">DEM/DET</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><div class="bar-val down">87tr</div></div>
+      <div class="bar-row"><div class="bar-lbl">Rework HQ</div><div class="bar-bg"><div class="bar-fill" style="width:55%;background:var(--amber)"></div></div><div class="bar-val warn">48tr</div></div>
+      <div class="bar-row"><div class="bar-lbl">OT nhân sự</div><div class="bar-bg"><div class="bar-fill" style="width:32%;background:var(--amber)"></div></div><div class="bar-val warn">28tr</div></div>
+      <div class="bar-row"><div class="bar-lbl">Hồ sơ sai</div><div class="bar-bg"><div class="bar-fill" style="width:22%;background:var(--purple)"></div></div><div class="bar-val" style="color:var(--purple)">19tr</div></div>
+      <div class="bar-row"><div class="bar-lbl">Phạt trễ</div><div class="bar-bg"><div class="bar-fill" style="width:14%;background:var(--text-3)"></div></div><div class="bar-val" style="color:var(--text-3)">12tr</div></div>
+      <div class="highlight red">
+        <div class="highlight-text">Tổng chi phí ẩn tháng 3: <strong>~194 triệu</strong> — tương đương 30% lợi nhuận gộp. Đây là tiền có thể tiết kiệm được với hệ thống đúng.</div>
+      </div>
+      <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
+        <div class="card-title" style="margin-bottom:10px">Chi phí OT theo chi nhánh</div>
+        <div class="bar-row"><div class="bar-lbl">Hải Phòng</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><div class="bar-val down">10.7tr</div></div>
+        <div class="bar-row"><div class="bar-lbl">Hà Nội</div><div class="bar-bg"><div class="bar-fill" style="width:44%;background:var(--amber)"></div></div><div class="bar-val warn">4.7tr</div></div>
+        <div class="bar-row"><div class="bar-lbl">TP.HCM</div><div class="bar-bg"><div class="bar-fill" style="width:28%;background:var(--accent)"></div></div><div class="bar-val info">3.0tr</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Kho ICD — Công suất & Chi phí</div></div>
+      <div class="chart-wrap" style="height:150px">
+        <canvas id="chartWarehouse"></canvas>
+      </div>
+      <div style="margin-top:14px">
+        <table class="tbl">
+          <tr><th>Kho</th><th>Diện tích</th><th>Công suất</th><th>Chi phí/m²</th><th>Hiệu quả</th></tr>
+          <tr><td>Kho HP (thường)</td><td class="mono">45.000m²</td><td class="warn">87%</td><td class="mono">42k</td><td><span class="badge badge-green">Cao</span></td></tr>
+          <tr><td>Kho HP (ngoại quan)</td><td class="mono">25.000m²</td><td class="up">78%</td><td class="mono">68k</td><td><span class="badge badge-green">Tốt</span></td></tr>
+          <tr><td>Kho Vĩnh Phúc</td><td class="mono">20.000m²</td><td class="down">52%</td><td class="mono">38k</td><td><span class="badge badge-red">Kém</span></td></tr>
+          <tr><td>Kho Việt Trì (hóa chất)</td><td class="mono">10.000m²</td><td class="warn">65%</td><td class="mono">95k</td><td><span class="badge badge-amber">Trung bình</span></td></tr>
+        </table>
+        <div class="highlight amber">
+          <div class="highlight-text">Kho Vĩnh Phúc chỉ 52% công suất nhưng vẫn chạy full chi phí vận hành — đang lãng phí ~7.6 triệu/tháng.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Chi phí phát sinh ngoài kế hoạch — 6 tháng</div></div>
+      <div class="chart-wrap" style="height:160px">
+        <canvas id="chartUnplanned"></canvas>
+      </div>
+      <div style="margin-top:14px">
+        <div class="card-title" style="margin-bottom:10px">Nguyên nhân phát sinh ngoài kế hoạch — T3/2026</div>
+        <table class="tbl">
+          <tr><th>Nguyên nhân</th><th>Số lần</th><th>Chi phí</th><th>Bộ phận</th></tr>
+          <tr><td>Khai báo HQ sai thông tin</td><td>8</td><td class="mono down">34tr</td><td>Ops HP</td></tr>
+          <tr><td>Container trả muộn</td><td>5</td><td class="mono down">28tr</td><td>Ops HN</td></tr>
+          <tr><td>Sửa chữa phương tiện</td><td>3</td><td class="mono warn">18tr</td><td>Vận tải</td></tr>
+          <tr><td>Hàng hóa hư hỏng</td><td>2</td><td class="mono warn">14tr</td><td>Kho HP</td></tr>
+        </table>
+        <div class="highlight amber">
+          <div class="highlight-text">Khai báo HQ sai thông tin xuất hiện 8 lần liên tiếp tại Ops HP — đây là vấn đề hệ thống, không phải lỗi cá nhân. Cần chuẩn hóa quy trình.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== PANEL 5: VẬN HÀNH =================== -->
+<div class="panel" id="p5">
+  <div class="g4">
+    <div class="metric">
+      <div class="accent-line" style="background:var(--green)"></div>
+      <div class="metric-label">Tỷ lệ đúng tiến độ lô hàng</div>
+      <div class="metric-value">84%</div>
+      <div class="metric-sub down">↓ 3% so T3 · Mục tiêu: 90%</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--accent)"></div>
+      <div class="metric-label">Thời gian phản hồi báo giá TB</div>
+      <div class="metric-value">3.2h</div>
+      <div class="metric-sub up">↓ Giảm từ 6.5h (trước hệ thống)</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--amber)"></div>
+      <div class="metric-label">Tỷ lệ tuân thủ quy trình</div>
+      <div class="metric-value">91%</div>
+      <div class="metric-sub up">↑ 6% so tháng đầu triển khai</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--purple)"></div>
+      <div class="metric-label">Thời gian duyệt tờ trình TB</div>
+      <div class="metric-value">4.8h</div>
+      <div class="metric-sub down">8 tờ trình đang quá 24h</div>
+    </div>
+  </div>
+
+  <div class="g12">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Phân bổ công việc (Workload)</div></div>
+      <div style="font-size:11px;color:var(--text-3);margin-bottom:12px">Số lô hàng đang phụ trách / nhân viên Ops</div>
+      <div class="prog-row"><div class="prog-name">Nguyễn Bình</div><div class="prog-bg"><div class="prog-fill" style="width:100%;background:var(--red)"></div></div><div class="prog-val down">18</div></div>
+      <div class="prog-row"><div class="prog-name">Trần Hoa</div><div class="prog-bg"><div class="prog-fill" style="width:89%;background:var(--amber)"></div></div><div class="prog-val warn">16</div></div>
+      <div class="prog-row"><div class="prog-name">Lê Văn Nam</div><div class="prog-bg"><div class="prog-fill" style="width:78%;background:var(--amber)"></div></div><div class="prog-val warn">14</div></div>
+      <div class="prog-row"><div class="prog-name">Phạm Thu</div><div class="prog-bg"><div class="prog-fill" style="width:67%;background:var(--green)"></div></div><div class="prog-val up">12</div></div>
+      <div class="prog-row"><div class="prog-name">Đỗ Hùng</div><div class="prog-bg"><div class="prog-fill" style="width:55%;background:var(--green)"></div></div><div class="prog-val up">10</div></div>
+      <div class="prog-row"><div class="prog-name">Minh (nghỉ phép)</div><div class="prog-bg"><div class="prog-fill" style="width:0%;background:var(--text-3)"></div></div><div class="prog-val" style="color:var(--text-3)">0</div></div>
+      <div class="highlight red">
+        <div class="highlight-text">Nguyễn Bình đang gánh 18 lô — quá tải. Minh nghỉ phép khiến 12 lô của Minh dồn sang người khác.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Trạng thái lô hàng theo bước quy trình</div></div>
+      <div class="funnel-row"><div class="funnel-lbl">Booking xác nhận</div><div class="funnel-bg"><div class="funnel-fill" style="width:100%;background:rgba(59,130,246,0.4);color:#93c5fd">38 lô</div></div><div class="funnel-n">38</div></div>
+      <div class="funnel-row"><div class="funnel-lbl">Khai báo hải quan</div><div class="funnel-bg"><div class="funnel-fill" style="width:71%;background:rgba(139,92,246,0.4);color:#c4b5fd">27 lô</div></div><div class="funnel-n">27</div></div>
+      <div class="funnel-row"><div class="funnel-lbl">Thông quan</div><div class="funnel-bg"><div class="funnel-fill" style="width:61%;background:rgba(20,184,166,0.4);color:#5eead4">23 lô</div></div><div class="funnel-n">23</div></div>
+      <div class="funnel-row"><div class="funnel-lbl">Làm hàng tại cảng</div><div class="funnel-bg"><div class="funnel-fill" style="width:50%;background:rgba(245,158,11,0.4);color:#fcd34d">19 lô</div></div><div class="funnel-n">19</div></div>
+      <div class="funnel-row"><div class="funnel-lbl">Điều độ xe vận chuyển</div><div class="funnel-bg"><div class="funnel-fill" style="width:40%;background:rgba(249,115,22,0.4);color:#fdba74">15 lô</div></div><div class="funnel-n">15</div></div>
+      <div class="funnel-row"><div class="funnel-lbl">Đang vận chuyển</div><div class="funnel-bg"><div class="funnel-fill" style="width:29%;background:rgba(16,185,129,0.4);color:#6ee7b7">11 lô</div></div><div class="funnel-n">11</div></div>
+      <div class="funnel-row"><div class="funnel-lbl">Hoàn thiện chứng từ</div><div class="funnel-bg"><div class="funnel-fill" style="width:13%;background:rgba(148,163,184,0.3);color:#94a3b8">5 lô</div></div><div class="funnel-n">5</div></div>
+      <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
+        <div class="card-title" style="margin-bottom:10px">Thời gian trung bình từng bước (giờ)</div>
+        <div class="bar-row"><div class="bar-lbl" style="width:100px">Booking → Khai báo</div><div class="bar-bg"><div class="bar-fill" style="width:55%;background:var(--green)"></div></div><div class="bar-val up">8.2h</div></div>
+        <div class="bar-row"><div class="bar-lbl" style="width:100px">Khai báo → Thông quan</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><div class="bar-val down">38.4h ⚠</div></div>
+        <div class="bar-row"><div class="bar-lbl" style="width:100px">Thông quan → Giao hàng</div><div class="bar-bg"><div class="bar-fill" style="width:72%;background:var(--amber)"></div></div><div class="bar-val warn">27.1h</div></div>
+        <div class="highlight amber">
+          <div class="highlight-text">Bước "Khai báo → Thông quan" đang mất 38.4h — cao gấp đôi chuẩn ngành 18h. Đây là nút thắt cổ chai lớn nhất của FTC.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Kỷ luật vận hành — Tuân thủ quy trình</div></div>
+      <div class="chart-wrap" style="height:160px">
+        <canvas id="chartProcess"></canvas>
+      </div>
+      <div style="margin-top:12px">
+        <table class="tbl">
+          <tr><th>Bộ phận</th><th>Tuân thủ quy trình</th><th>Deadline nội bộ</th><th>Đánh giá</th></tr>
+          <tr><td>Ops Hà Nội</td><td class="up">96%</td><td class="up">92%</td><td><span class="badge badge-green">Tốt</span></td></tr>
+          <tr><td>Ops Hải Phòng</td><td class="warn">83%</td><td class="warn">78%</td><td><span class="badge badge-amber">Cần cải thiện</span></td></tr>
+          <tr><td>Sales toàn quốc</td><td class="up">91%</td><td class="down">71%</td><td><span class="badge badge-amber">Deadline kém</span></td></tr>
+          <tr><td>Kho ICD</td><td class="up">94%</td><td class="up">89%</td><td><span class="badge badge-green">Tốt</span></td></tr>
+          <tr><td>Ops TP.HCM</td><td class="down">76%</td><td class="down">68%</td><td><span class="badge badge-red">Cần xem lại</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Tờ trình & Phê duyệt nội bộ đang chờ</div></div>
+      <table class="tbl">
+        <tr><th>Loại tờ trình</th><th>Người gửi</th><th>Chờ từ</th><th>SLA</th><th>Trạng thái</th></tr>
+        <tr><td>Tạm ứng chi phí cảng</td><td>Bình (HP)</td><td class="mono">36h</td><td class="mono">24h</td><td><span class="badge badge-red">Trễ</span></td></tr>
+        <tr><td>Đề xuất giữ giá cước</td><td>Minh (Sales)</td><td class="mono">28h</td><td class="mono">24h</td><td><span class="badge badge-red">Trễ</span></td></tr>
+        <tr><td>Phê duyệt hợp đồng thuê kho</td><td>Nam (HCM)</td><td class="mono">22h</td><td class="mono">24h</td><td><span class="badge badge-amber">Sắp trễ</span></td></tr>
+        <tr><td>Đề xuất mua sắm thiết bị</td><td>Hoa (Kho)</td><td class="mono">18h</td><td class="mono">48h</td><td><span class="badge badge-blue">Đúng hạn</span></td></tr>
+        <tr><td>Tạm ứng công tác phí</td><td>Lan (HN)</td><td class="mono">8h</td><td class="mono">24h</td><td><span class="badge badge-green">Mới</span></td></tr>
+      </table>
+      <div class="highlight red">
+        <div class="highlight-text">2 tờ trình đã quá SLA 24h — đang chờ ai duyệt? Với Zalo/Email, không ai biết. Base Request tự động nhắc người duyệt mỗi 4h.</div>
+      </div>
+      <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
+        <div class="card-title" style="margin-bottom:8px">Thời gian duyệt trung bình theo cấp</div>
+        <div class="bar-row"><div class="bar-lbl">Trưởng phòng</div><div class="bar-bg"><div class="bar-fill" style="width:55%;background:var(--green)"></div></div><div class="bar-val up">2.1h</div></div>
+        <div class="bar-row"><div class="bar-lbl">Phó TGĐ</div><div class="bar-bg"><div class="bar-fill" style="width:100%;background:var(--red)"></div></div><div class="bar-val down">11.4h</div></div>
+        <div class="bar-row"><div class="bar-lbl">TGĐ</div><div class="bar-bg"><div class="bar-fill" style="width:78%;background:var(--amber)"></div></div><div class="bar-val warn">8.8h</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =================== PANEL 6: NHÂN SỰ =================== -->
+<div class="panel" id="p6">
+  <div class="g4">
+    <div class="metric">
+      <div class="accent-line" style="background:var(--accent)"></div>
+      <div class="metric-label">Tổng nhân sự</div>
+      <div class="metric-value">107</div>
+      <div class="metric-sub warn">Đang tuyển thêm 10 vị trí</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--red)"></div>
+      <div class="metric-label">Chưa chấm công hôm nay</div>
+      <div class="metric-value">5</div>
+      <div class="metric-sub down">2 HN · 2 HP · 1 HCM</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--amber)"></div>
+      <div class="metric-label">Đơn nghỉ phép chờ duyệt</div>
+      <div class="metric-value">8</div>
+      <div class="metric-sub warn">3 đơn quá 24h chưa xử lý</div>
+    </div>
+    <div class="metric">
+      <div class="accent-line" style="background:var(--purple)"></div>
+      <div class="metric-label">OT tháng này (tích lũy)</div>
+      <div class="metric-value">412h</div>
+      <div class="metric-sub down">Chi phí: ~18.5 triệu</div>
+    </div>
+  </div>
+
+  <div class="g21">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Nhân sự theo chi nhánh & trạng thái hôm nay</div></div>
+      <table class="tbl">
+        <tr><th>Chi nhánh</th><th>Tổng NS</th><th>Đang làm việc</th><th>Nghỉ phép</th><th>Chưa check-in</th><th>OT tháng</th></tr>
+        <tr><td>Hà Nội (VP + Trụ sở)</td><td class="mono">42</td><td class="mono up">39</td><td class="mono">1</td><td class="mono warn">2</td><td class="mono warn">142h</td></tr>
+        <tr><td>Hải Phòng</td><td class="mono">30</td><td class="mono up">26</td><td class="mono">2</td><td class="mono warn">2</td><td class="mono down">241h</td></tr>
+        <tr><td>TP. Hồ Chí Minh</td><td class="mono">20</td><td class="mono up">18</td><td class="mono">1</td><td class="mono warn">1</td><td class="mono">29h</td></tr>
+        <tr><td>Việt Trì (Phú Thọ)</td><td class="mono">10</td><td class="mono up">10</td><td class="mono">0</td><td class="mono up">0</td><td class="mono">0h</td></tr>
+        <tr><td>Vĩnh Phúc (ICD)</td><td class="mono">5</td><td class="mono up">5</td><td class="mono">0</td><td class="mono up">0</td><td class="mono">0h</td></tr>
+      </table>
+      <div style="border-top:1px solid var(--border);margin-top:14px;padding-top:14px">
+        <div class="card-title" style="margin-bottom:12px">Nhân sự chưa check-in hôm nay — cần xác nhận</div>
+        <table class="tbl">
+          <tr><th>Tên</th><th>Chi nhánh</th><th>Bộ phận</th><th>Đang phụ trách</th><th>Tác động</th></tr>
+          <tr><td>Nguyễn T. Bình</td><td>HN</td><td>Ops</td><td>4 lô hàng active</td><td><span class="badge badge-red">Cao</span></td></tr>
+          <tr><td>Lê Văn Hoàng</td><td>HN</td><td>Kho</td><td>Kiểm kê tồn kho</td><td><span class="badge badge-amber">Trung bình</span></td></tr>
+          <tr><td>Trần Minh</td><td>HP</td><td>Tài xế</td><td>3 chuyến sáng nay</td><td><span class="badge badge-red">Cao</span></td></tr>
+          <tr><td>Phạm Lan</td><td>HP</td><td>CS</td><td>Theo dõi 6 lô</td><td><span class="badge badge-amber">Trung bình</span></td></tr>
+          <tr><td>Đỗ Quang</td><td>HCM</td><td>Sale</td><td>2 RFQ cần phản hồi</td><td><span class="badge badge-amber">Trung bình</span></td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-header"><div class="card-title">10 Vị trí đang tuyển dụng</div></div>
+        <table class="tbl">
+          <tr><th>Vị trí</th><th>Cấp bậc</th><th>Mức độ cấp thiết</th></tr>
+          <tr><td>Phó GĐ phụ trách Logistics</td><td>C-level</td><td><span class="badge badge-red">Rất cấp thiết</span></td></tr>
+          <tr><td>Kế toán trưởng</td><td>C-level</td><td><span class="badge badge-red">Rất cấp thiết</span></td></tr>
+          <tr><td>Trưởng phòng Sale</td><td>Trưởng phòng</td><td><span class="badge badge-red">Cấp thiết</span></td></tr>
+          <tr><td>Trưởng phòng Logistics</td><td>Trưởng phòng</td><td><span class="badge badge-amber">Cấp thiết</span></td></tr>
+          <tr><td>Trưởng VPĐD HCM</td><td>Trưởng phòng</td><td><span class="badge badge-amber">Cấp thiết</span></td></tr>
+          <tr><td>Kế toán tổng hợp</td><td>Nhân viên</td><td><span class="badge badge-blue">Bình thường</span></td></tr>
+          <tr><td>NV Logistics HN (x2)</td><td>Nhân viên</td><td><span class="badge badge-blue">Bình thường</span></td></tr>
+          <tr><td>NV Logistics HCM</td><td>Nhân viên</td><td><span class="badge badge-blue">Bình thường</span></td></tr>
+          <tr><td>Lái xe Giám đốc</td><td>Nhân viên</td><td><span class="badge badge-blue">Bình thường</span></td></tr>
+        </table>
+        <div class="highlight amber">
+          <div class="highlight-text">FTC đang scale từ ~40 lên 60-70 người. Không có hệ thống HRM, việc onboard đồng loạt sẽ rất hỗn loạn.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Sức khỏe khách hàng VIP</div></div>
+        <div class="bar-row"><div class="bar-lbl">Samsung SDI</div><div class="bar-bg"><div class="bar-fill" style="width:95%;background:var(--green)"></div></div><div class="bar-val up">95/100</div></div>
+        <div class="bar-row"><div class="bar-lbl">Lotte Chemical</div><div class="bar-bg"><div class="bar-fill" style="width:88%;background:var(--green)"></div></div><div class="bar-val up">88/100</div></div>
+        <div class="bar-row"><div class="bar-lbl">Hyundai MM</div><div class="bar-bg"><div class="bar-fill" style="width:42%;background:var(--red)"></div></div><div class="bar-val down">42/100</div></div>
+        <div class="bar-row"><div class="bar-lbl">Panasonic VN</div><div class="bar-bg"><div class="bar-fill" style="width:58%;background:var(--amber)"></div></div><div class="bar-val warn">58/100</div></div>
+        <div class="bar-row"><div class="bar-lbl">LG Innotek</div><div class="bar-bg"><div class="bar-fill" style="width:82%;background:var(--green)"></div></div><div class="bar-val up">82/100</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<!-- FOOTER -->
+<div class="powered">
+  <div class="powered-txt">FTC Logistics Dashboard · Dữ liệu minh họa cho buổi tư vấn Base.vn · 01/04/2026</div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div class="powered-txt">Được xây dựng trên nền tảng</div>
+    <div class="base-badge">Base.vn</div>
+  </div>
+</div>
+
+<script>
+// CLOCK
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('vi-VN');
+}
+updateClock(); setInterval(updateClock, 1000);
+
+// TAB SWITCH
+function showPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+
+// CHART DEFAULTS
+Chart.defaults.color = '#8b96b8';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+Chart.defaults.font.family = "'Be Vietnam Pro', sans-serif";
+Chart.defaults.font.size = 11;
+
+// CHART 1 — Revenue 6 months
+new Chart(document.getElementById('chartRevenue'), {
+  type: 'bar',
+  data: {
+    labels: ['T11','T12','T1','T2','T3','T4'],
+    datasets: [
+      { label: 'Forwarder', data: [2100,2300,1900,2400,2600,2604], backgroundColor: 'rgba(59,130,246,0.7)', stack: 'a' },
+      { label: 'Kho ICD',   data: [780,820,700,880,940,1008], backgroundColor: 'rgba(16,185,129,0.7)', stack: 'a' },
+      { label: 'Xây dựng',  data: [320,410,280,380,420,588], backgroundColor: 'rgba(139,92,246,0.5)', stack: 'a' },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, padding: 12, usePointStyle: true } } },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v/1000 + 'tỷ' } }
+    }
+  }
+});
+
+// CHART 2 — DEM/DET
+new Chart(document.getElementById('chartDEM'), {
+  type: 'bar',
+  data: {
+    labels: ['T9','T10','T11','T12','T1','T2','T3'],
+    datasets: [{
+      label: 'Chi phí DEM/DET (tr)',
+      data: [42, 38, 55, 71, 68, 71, 87],
+      backgroundColor: ctx => {
+        const v = ctx.raw;
+        return v > 70 ? 'rgba(239,68,68,0.7)' : v > 55 ? 'rgba(245,158,11,0.7)' : 'rgba(59,130,246,0.5)';
+      },
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v + 'tr' } } }
+  }
+});
+
+// CHART 3 — P&L
+new Chart(document.getElementById('chartPnL'), {
+  type: 'bar',
+  data: {
+    labels: ['T11','T12','T1','T2','T3','T4*'],
+    datasets: [
+      { label: 'Doanh thu', data: [3200,3530,2880,3660,3960,4200], backgroundColor: 'rgba(59,130,246,0.6)', borderRadius: 4, yAxisID: 'y' },
+      { label: 'LN gộp', data: [384,459,317,476,475,630], backgroundColor: 'rgba(16,185,129,0.7)', borderRadius: 4, yAxisID: 'y' },
+      { label: 'Biên LN (%)', data: [12,13,11,13,12,15], type: 'line', borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', pointRadius: 4, fill: true, yAxisID: 'y2', tension: 0.4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, padding: 12, usePointStyle: true } } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { position: 'left', ticks: { callback: v => v/1000+'tỷ' } },
+      y2: { position: 'right', grid: { drawOnChartArea: false }, ticks: { callback: v => v+'%' } }
+    }
+  }
+});
+
+// CHART 4 — Costs
+new Chart(document.getElementById('chartCost'), {
+  type: 'line',
+  data: {
+    labels: ['T10','T11','T12','T1','T2','T3'],
+    datasets: [
+      { label: 'DEM/DET', data: [38, 55, 71, 68, 71, 87], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.08)', fill: true, tension: 0.4, pointRadius: 4 },
+      { label: 'Nhân sự OT', data: [14, 16, 19, 15, 17, 18.5], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.08)', fill: true, tension: 0.4, pointRadius: 4 },
+      { label: 'Chi phí rework', data: [6, 9, 11, 8, 10, 12.3], borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.08)', fill: true, tension: 0.4, pointRadius: 4 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, padding: 12, usePointStyle: true } } },
+    scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v+'tr' } } }
+  }
+});
+
+// CHART 5 — Warehouse
+new Chart(document.getElementById('chartWarehouse'), {
+  type: 'bar',
+  data: {
+    labels: ['Kho HP thường', 'Kho HP ngoại quan', 'Kho Vĩnh Phúc', 'Kho Việt Trì HC'],
+    datasets: [
+      { label: 'Công suất sử dụng (%)', data: [87, 78, 52, 65], backgroundColor: ['rgba(239,68,68,0.7)','rgba(16,185,129,0.7)','rgba(239,68,68,0.5)','rgba(245,158,11,0.7)'], borderRadius: 4 }
+    ]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { max: 100, ticks: { callback: v => v+'%' } },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+// CHART 6 — Unplanned costs
+new Chart(document.getElementById('chartUnplanned'), {
+  type: 'bar',
+  data: {
+    labels: ['T10','T11','T12','T1','T2','T3'],
+    datasets: [{
+      label: 'Chi phí ngoài kế hoạch (tr)',
+      data: [68, 92, 118, 84, 95, 94],
+      backgroundColor: 'rgba(245,158,11,0.6)',
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => v+'tr' } } }
+  }
+});
+
+// CHART 7 — Process compliance
+new Chart(document.getElementById('chartProcess'), {
+  type: 'radar',
+  data: {
+    labels: ['Tuân thủ QT', 'Deadline nội bộ', 'Cập nhật hệ thống', 'Phối hợp bộ phận', 'Báo cáo đúng hạn'],
+    datasets: [
+      { label: 'Hà Nội', data: [96, 92, 90, 88, 94], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', pointRadius: 3 },
+      { label: 'Hải Phòng', data: [83, 78, 80, 72, 76], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', pointRadius: 3 },
+      { label: 'TP.HCM', data: [76, 68, 72, 65, 70], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', pointRadius: 3 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 8, padding: 12, usePointStyle: true } } },
+    scales: { r: { min: 50, max: 100, ticks: { display: false }, grid: { color: 'rgba(255,255,255,0.06)' }, pointLabels: { font: { size: 10 }, color: '#8b96b8' } } }
+  }
+});
+</script>
+</body>
+</html>
