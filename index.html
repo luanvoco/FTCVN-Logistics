@@ -7,169 +7,223 @@
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{--G:#1a7a3c;--GM:#2d9e55;--GL:#e8f5ee;--GP:#f2faf6;--B:#1565c0;--BM:#1976d2;--BL:#e3f0fd;--BP:#f0f7ff;--R:#d32f2f;--RL:#fdecea;--A:#e65100;--AL:#fff3e0;--P:#6a1b9a;--PL:#f3e5f5;--bg:#f5f7fa;--card:#fff;--sub:#f0f4f8;--bdr:#dde3ec;--bdr2:#bcc6d6;--t1:#0d1b2a;--t2:#3a4a5c;--t3:#7a8fa8;--t4:#a8b8cc;--font:'Be Vietnam Pro',sans-serif;--mono:'JetBrains Mono',monospace;--r:10px;--sh:0 1px 4px rgba(0,0,0,.08)}
+:root{
+  --G:#1a7a3c;--GM:#2d9e55;--GL:#e8f5ee;--GP:#f2faf6;
+  --B:#1565c0;--BM:#1976d2;--BL:#e3f0fd;
+  --T:#00695c;--TL:#e0f2f1;
+  --V:#6a1b9a;--VL:#f3e5f5;
+  --R:#c62828;--RL:#ffebee;
+  --A:#e65100;--AL:#fff3e0;
+  --bg:#f4f6f9;--card:#fff;--sub:#f0f4f8;
+  --bdr:#dde3ec;--bdr2:#bcc6d6;
+  --t1:#0d1b2a;--t2:#3a4a5c;--t3:#7a8fa8;--t4:#a8b8cc;
+  --font:'Be Vietnam Pro',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:10px;--sh:0 1px 4px rgba(0,0,0,.07);--sh2:0 2px 12px rgba(0,0,0,.10);
+}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:13px;min-height:100vh}
-.header{background:#fff;border-bottom:3px solid var(--G);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+/* HEADER */
+.header{background:#fff;border-bottom:3px solid var(--G);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200;box-shadow:var(--sh2)}
 .logo{display:flex;align-items:center;gap:12px}
-.logo-badge{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--G),var(--GM));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff;letter-spacing:-.5px}
-.logo-name{font-weight:700;font-size:15px;color:var(--t1)}
-.logo-sub{font-size:11px;color:var(--t3);margin-top:1px}
-.hdr-r{display:flex;align-items:center;gap:14px}
-.live{display:flex;align-items:center;gap:6px;background:var(--GL);border:1px solid #a8d5bc;border-radius:20px;padding:4px 12px;font-size:11px;color:var(--G);font-weight:600}
+.lbadge{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--G),var(--GM));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}
+.lname{font-weight:700;font-size:15px;color:var(--t1)}
+.lsub{font-size:11px;color:var(--t3);margin-top:1px}
+.hdr-r{display:flex;align-items:center;gap:12px}
+.live{display:flex;align-items:center;gap:6px;background:var(--GL);border:1px solid #a8d5bc;border-radius:20px;padding:4px 11px;font-size:11px;color:var(--G);font-weight:600}
 .ldot{width:6px;height:6px;border-radius:50%;background:var(--G);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .hclock{font-family:var(--mono);font-size:12px;color:var(--t3);text-align:right}
-.hdate{font-size:11px;color:var(--t4)}
+.hdate{font-size:10px;color:var(--t4)}
 
-/* Legend */
-.legend{background:#fff;border-bottom:1px solid var(--bdr);padding:6px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.li{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)}
-.ldot2{width:8px;height:8px;border-radius:50%}
+/* SOURCE LEGEND */
+.legend{background:#fff;border-bottom:1px solid var(--bdr);padding:5px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--t3)}
+.ld{width:7px;height:7px;border-radius:50%}
 
-/* Source tags */
-.src{display:inline-flex;align-items:center;font-size:9px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px;vertical-align:middle}
+/* SOURCE TAGS */
+.src{display:inline-flex;align-items:center;font-size:9px;font-weight:700;padding:1px 5px;border-radius:8px;margin-left:3px;vertical-align:middle;cursor:help;position:relative}
 .sa{background:var(--GL);color:var(--G);border:1px solid #a8d5bc}
 .si{background:var(--BL);color:var(--B);border:1px solid #90bce8}
-.se{background:var(--AL);color:var(--A);border:1px solid #ffcc80}
+.sx{background:var(--TL);color:var(--T);border:1px solid #80cbc4}
+.sv{background:var(--VL);color:var(--V);border:1px solid #ce93d8}
 
-/* Nav */
-.nav{background:#fff;border-bottom:1px solid var(--bdr);padding:0 28px;display:flex;gap:2px;overflow-x:auto}
-.tab{padding:10px 16px;font-size:12px;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;background:transparent}
+/* TOOLTIP on src tags */
+.src .tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--t1);color:#fff;font-size:10px;font-weight:400;padding:5px 9px;border-radius:6px;white-space:nowrap;z-index:999;pointer-events:none;box-shadow:var(--sh2)}
+.src .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--t1)}
+.src:hover .tip{display:block}
+
+/* FILTER BAR */
+.filters{background:#fff;border-bottom:1px solid var(--bdr);padding:8px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:58px;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.filter-label{font-size:11px;font-weight:600;color:var(--t3);margin-right:2px}
+.filter-group{display:flex;gap:4px;align-items:center}
+.fbtn{padding:5px 12px;font-size:11px;font-weight:600;border-radius:6px;border:1px solid var(--bdr);background:var(--sub);color:var(--t3);cursor:pointer;transition:all .15s;font-family:var(--font)}
+.fbtn:hover{border-color:var(--G);color:var(--G)}
+.fbtn.active{background:var(--GL);border-color:var(--G);color:var(--G)}
+.fsel{padding:5px 10px;font-size:11px;font-weight:500;border-radius:6px;border:1px solid var(--bdr);background:var(--card);color:var(--t2);cursor:pointer;font-family:var(--font);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a8fa8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px}
+.fsel:focus{outline:none;border-color:var(--G)}
+.fsep{width:1px;height:18px;background:var(--bdr2);margin:0 4px}
+.filter-info{font-size:11px;color:var(--t3);margin-left:auto}
+
+/* NAV */
+.nav{background:#fff;border-bottom:1px solid var(--bdr);padding:0 24px;display:flex;gap:2px;overflow-x:auto}
+.tab{padding:9px 14px;font-size:12px;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;background:transparent}
 .tab:hover{color:var(--t2)}
 .tab.active{color:var(--G);border-bottom-color:var(--G);font-weight:700}
 .tdot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:5px}
 
-/* Main */
-.main{padding:20px 28px}
+/* MAIN */
+.main{padding:16px 24px}
 .panel{display:none}.panel.active{display:block}
 
-/* Grid */
+/* GRIDS */
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
 .g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin-bottom:14px}
 .g21{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px;margin-bottom:14px}
 .g12{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.65fr);gap:12px;margin-bottom:14px}
 
-/* Card */
+/* CARDS */
 .card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
-.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}
 .ct{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.07em}
 
-/* Metric */
-.m{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;box-shadow:var(--sh);position:relative;overflow:hidden}
+/* METRIC CARDS — clickable */
+.m{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;box-shadow:var(--sh);position:relative;overflow:hidden;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.m:hover{box-shadow:var(--sh2);border-color:var(--G)}
 .ma{position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r) var(--r) 0 0}
-.ml{font-size:11px;font-weight:600;color:var(--t3);margin-bottom:8px}
+.ml{font-size:11px;font-weight:600;color:var(--t3);margin-bottom:7px}
 .mv{font-size:24px;font-weight:700;color:var(--t1);line-height:1;font-family:var(--mono);letter-spacing:-.5px}
-.ms{font-size:11px;margin-top:6px;font-weight:500}
+.ms{font-size:11px;margin-top:5px;font-weight:500}
 .mb{height:3px;background:var(--sub);border-radius:2px;margin-top:10px;overflow:hidden}
-.mf{height:100%;border-radius:2px;transition:width 1s}
+.mf{height:100%;border-radius:2px}
 .mn{font-size:10px;color:var(--t4);margin-top:4px}
+/* Expandable breakdown under metric */
+.m-expand{display:none;margin-top:12px;border-top:1px solid var(--bdr);padding-top:10px}
+.m-expand.open{display:block}
+.mex-row{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);padding:3px 0}
+.mex-label{color:var(--t3)}
 
-/* Colors */
-.cg{color:var(--G)}.cb{color:var(--B)}.cr{color:var(--R)}.ca{color:var(--A)}.cp{color:var(--P)}.c3{color:var(--t3)}
+/* COLORS */
+.cg{color:var(--G)}.cb{color:var(--B)}.cr{color:var(--R)}.ca{color:var(--A)}.cv{color:var(--V)}.ct2{color:var(--T)}.c3{color:var(--t3)}
 
-/* Badge */
-.b{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
-.br{background:var(--RL);color:var(--R);border:1px solid #f4a0a0}
+/* BADGES */
+.b{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700}
+.br{background:var(--RL);color:var(--R);border:1px solid #ef9a9a}
 .bg2{background:var(--GL);color:var(--G);border:1px solid #a8d5bc}
 .bb{background:var(--BL);color:var(--B);border:1px solid #90bce8}
 .ba{background:var(--AL);color:var(--A);border:1px solid #ffcc80}
-.bp{background:var(--PL);color:var(--P);border:1px solid #ce93d8}
+.bv{background:var(--VL);color:var(--V);border:1px solid #ce93d8}
 .bgr{background:var(--sub);color:var(--t3);border:1px solid var(--bdr)}
 
-/* Section */
-.sl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+/* SECTION LABEL */
+.sl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:9px;display:flex;align-items:center;gap:8px}
 .sl::after{content:'';flex:1;height:1px;background:var(--bdr)}
 
-/* Table */
+/* STRIP */
+.strip{background:#fff;border:1px solid var(--bdr);border-radius:var(--r);padding:9px 14px;margin-bottom:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;box-shadow:var(--sh)}
+.sti{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)}
+.stsep{width:1px;height:14px;background:var(--bdr2);margin:0 6px}
+
+/* TABLE — expandable rows */
 .tbl{width:100%;border-collapse:collapse}
-.tbl th{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;padding:6px 8px;border-bottom:2px solid var(--bdr);text-align:left;background:var(--sub)}
-.tbl td{padding:8px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--t1)}
+.tbl th{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;padding:7px 8px;border-bottom:2px solid var(--bdr);text-align:left;background:var(--sub)}
+.tbl td{padding:9px 8px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--t1)}
 .tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:var(--GP)}
+.tbl tr.expandable:hover td{background:var(--GP);cursor:pointer}
+.tbl tr.expandable td:first-child::before{content:'▶';font-size:9px;color:var(--t4);margin-right:6px;transition:transform .2s;display:inline-block}
+.tbl tr.expandable.open td:first-child::before{transform:rotate(90deg);color:var(--G)}
+.tbl tr.sub-row{display:none;background:var(--GP)}
+.tbl tr.sub-row.show{display:table-row}
+.tbl tr.sub-row td{font-size:11px;color:var(--t3);padding:6px 8px 6px 28px;border-bottom:1px dashed var(--bdr)}
+.tbl tr.sub-row td:first-child::before{content:'└ ';color:var(--t4)}
 .mono{font-family:var(--mono);font-size:11px}
 
-/* Bar row */
+/* BAR ROWS */
 .br2{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.bl2{font-size:11px;color:var(--t2);width:80px;text-align:right;flex-shrink:0}
+.bl2{font-size:11px;color:var(--t2);width:88px;text-align:right;flex-shrink:0}
 .bb2{flex:1;background:var(--sub);border-radius:3px;height:7px;overflow:hidden}
-.bf{height:100%;border-radius:3px;transition:width 1s .3s}
-.bv{font-size:11px;font-weight:700;font-family:var(--mono);width:52px;color:var(--t1)}
+.bf{height:100%;border-radius:3px}
+.bv2{font-size:11px;font-weight:700;font-family:var(--mono);width:52px;color:var(--t1)}
 
-/* Progress */
+/* PROGRESS */
 .pr{display:flex;align-items:center;gap:10px;margin-bottom:9px}
 .pn{font-size:12px;color:var(--t2);width:110px;flex-shrink:0}
 .pb{flex:1;background:var(--sub);border-radius:3px;height:5px;overflow:hidden}
-.pf{height:100%;border-radius:3px;transition:width 1s .4s}
+.pf{height:100%;border-radius:3px}
 .pv{font-size:11px;font-weight:700;font-family:var(--mono);width:38px;text-align:right;flex-shrink:0}
 
-/* Funnel */
+/* FUNNEL */
 .fr{display:flex;align-items:center;gap:10px;margin-bottom:7px}
-.fl{font-size:11px;color:var(--t3);width:120px;text-align:right;flex-shrink:0}
+.fl{font-size:11px;color:var(--t3);width:130px;text-align:right;flex-shrink:0}
 .fbg{flex:1;background:var(--sub);border-radius:3px;height:18px;overflow:hidden}
-.ff{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700;transition:width 1s .3s}
+.ff{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700}
 .fn{font-size:11px;font-weight:700;font-family:var(--mono);width:30px;text-align:right;flex-shrink:0}
 
-/* Alert */
-.ar{display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:8px;transition:background .15s}
+/* ALERT ROWS */
+.ar{display:flex;align-items:flex-start;gap:10px;padding:9px 10px;border-radius:8px;transition:background .15s;cursor:pointer}
 .ar:hover{background:var(--GP)}
 .ad{width:7px;height:7px;border-radius:50%;margin-top:5px;flex-shrink:0}
 .adr{background:var(--R)}.ada{background:var(--A)}.adg{background:var(--G)}.adb{background:var(--B)}
 .at{font-size:12px;color:var(--t1);line-height:1.5}
 .am{font-size:11px;color:var(--t3);margin-top:2px}
+/* Alert expand */
+.ar-detail{display:none;margin-top:8px;background:var(--sub);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--t2);line-height:1.6}
+.ar-detail.show{display:block}
 
-/* Timeline */
+/* TIMELINE */
 .tl{position:relative;padding-left:22px}
 .tl::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:1px;background:var(--bdr)}
-.tli{position:relative;margin-bottom:14px}
+.tli{position:relative;margin-bottom:13px}
 .tldot{position:absolute;left:-18px;top:4px;width:8px;height:8px;border-radius:50%;border:2px solid var(--card)}
 .tltime{font-size:10px;color:var(--t4);font-family:var(--mono)}
 .tltext{font-size:12px;color:var(--t1);margin-top:2px;line-height:1.5}
 .tlsub{font-size:11px;color:var(--t3)}
 
-/* Highlight */
-.hl{border-radius:0 8px 8px 0;padding:10px 14px;margin-top:12px;border-left:3px solid}
+/* HIGHLIGHT */
+.hl{border-radius:0 8px 8px 0;padding:9px 13px;margin-top:11px;border-left:3px solid}
 .hlg{background:var(--GL);border-color:var(--G)}
 .hlb{background:var(--BL);border-color:var(--B)}
 .hlr{background:var(--RL);border-color:var(--R)}
 .hla{background:var(--AL);border-color:var(--A)}
 .hlt{font-size:12px;color:var(--t2);line-height:1.6}
 
-/* Risk item */
-.ri{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:var(--sub);border-radius:8px;margin-bottom:8px;border:1px solid var(--bdr)}
-.ric{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+/* RISK ITEM */
+.ri{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;background:var(--sub);border-radius:8px;margin-bottom:8px;border:1px solid var(--bdr);cursor:pointer;transition:border-color .15s}
+.ri:hover{border-color:var(--G)}
+.ric{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
 .rit{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:2px}
 .rid{font-size:11px;color:var(--t3);line-height:1.5}
 .riv{margin-left:auto;flex-shrink:0;text-align:right;font-family:var(--mono);font-size:15px;font-weight:700}
+.ri-sub{display:none;margin-top:8px;border-top:1px dashed var(--bdr);padding-top:8px;font-size:11px;color:var(--t2);line-height:1.6}
+.ri-sub.show{display:block}
 
-/* Strip */
-.strip{background:#fff;border:1px solid var(--bdr);border-radius:var(--r);padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;box-shadow:var(--sh)}
-.sti{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)}
-.stsep{width:1px;height:14px;background:var(--bdr2);margin:0 6px}
-
-/* Chart wrap */
+/* CHART */
 .cw{position:relative;width:100%}
 
-/* Scrollbar */
+/* SCROLLBAR */
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
 
-/* Footer */
-.footer{border-top:1px solid var(--bdr);padding:10px 28px;display:flex;justify-content:space-between;align-items:center;background:#fff}
+/* FOOTER */
+.footer{border-top:1px solid var(--bdr);padding:10px 24px;display:flex;justify-content:space-between;align-items:center;background:#fff;margin-top:8px}
 .ft{font-size:10px;color:var(--t4)}
 .basebadge{font-size:10px;font-weight:700;color:var(--G);background:var(--GL);padding:3px 10px;border-radius:6px;border:1px solid #a8d5bc}
+
+/* NO DATA STATE */
+.no-data{text-align:center;padding:32px;color:var(--t4);font-size:12px}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div class="logo">
-    <div class="logo-badge">FTC</div>
+    <div class="lbadge">FTC</div>
     <div>
-      <div class="logo-name">FTC Logistics — Buồng Lái Ban Lãnh Đạo</div>
-      <div class="logo-sub">Quản trị vận hành · 5 chi nhánh · Tích hợp Base.vn</div>
+      <div class="lname">FTC Logistics — Buồng Lái Ban Lãnh Đạo</div>
+      <div class="lsub">Quản trị vận hành · 5 chi nhánh · Tích hợp Base.vn</div>
     </div>
   </div>
   <div class="hdr-r">
@@ -181,25 +235,64 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:13px
   </div>
 </div>
 
+<!-- SOURCE LEGEND -->
 <div class="legend">
   <span style="font-size:10px;font-weight:700;color:var(--t3);margin-right:4px">NGUỒN DỮ LIỆU:</span>
-  <div class="li"><div class="ldot2" style="background:var(--G)"></div>Base tự động — không cần nhập thủ công</div>
-  <div class="li"><div class="ldot2" style="background:var(--B)"></div>Base + FTC nhập đầu vào (thiết lập 1 lần)</div>
-  <div class="li"><div class="ldot2" style="background:var(--A)"></div>Ước tính — chính xác hơn khi tích hợp Misa</div>
+  <div class="li"><div class="ld" style="background:var(--G)"></div>Base — tự động, không nhập thủ công</div>
+  <div class="li"><div class="ld" style="background:var(--B)"></div>Base + thiết lập 1 lần</div>
+  <div class="li"><div class="ld" style="background:var(--T)"></div>Excel / Google Sheet (FTC cập nhật)</div>
+  <div class="li"><div class="ld" style="background:var(--V)"></div>AppSheet — nhân viên nhập trực tiếp</div>
 </div>
 
+<!-- FILTER BAR -->
+<div class="filters">
+  <div class="filter-group">
+    <span class="filter-label">Thời gian:</span>
+    <button class="fbtn" onclick="setTime(this,'today')">Hôm nay</button>
+    <button class="fbtn" onclick="setTime(this,'week')">Tuần này</button>
+    <button class="fbtn active" onclick="setTime(this,'month')">Tháng 4</button>
+    <button class="fbtn" onclick="setTime(this,'q2')">Quý 2</button>
+    <button class="fbtn" onclick="setTime(this,'ytd')">Cả năm</button>
+  </div>
+  <div class="fsep"></div>
+  <div class="filter-group">
+    <span class="filter-label">Chi nhánh:</span>
+    <select class="fsel" id="buFilter" onchange="applyBU(this.value)">
+      <option value="all">Tất cả chi nhánh</option>
+      <option value="hn">Hà Nội</option>
+      <option value="hp">Hải Phòng</option>
+      <option value="hcm">TP. Hồ Chí Minh</option>
+      <option value="vt">Việt Trì</option>
+      <option value="vp">Vĩnh Phúc (ICD)</option>
+    </select>
+  </div>
+  <div class="fsep"></div>
+  <div class="filter-group">
+    <span class="filter-label">Dịch vụ:</span>
+    <select class="fsel" id="svcFilter" onchange="applySvc(this.value)">
+      <option value="all">Tất cả dịch vụ</option>
+      <option value="fwd">Forwarder</option>
+      <option value="icd">Kho ICD</option>
+      <option value="xd">Xây dựng</option>
+      <option value="dai-ly">Đại lý tàu biển</option>
+    </select>
+  </div>
+  <div class="filter-info" id="filter-summary">Đang xem: Tháng 4/2026 · Tất cả chi nhánh · Tất cả dịch vụ</div>
+</div>
+
+<!-- NAV -->
 <div class="nav">
   <div class="tab active" onclick="show('p1',this)"><span class="tdot" style="background:var(--G)"></span>Tổng Quan Lãnh Đạo</div>
   <div class="tab" onclick="show('p2',this)"><span class="tdot" style="background:var(--R)"></span>Điểm Nóng Rủi Ro</div>
   <div class="tab" onclick="show('p3',this)"><span class="tdot" style="background:var(--B)"></span>Doanh Thu & LN</div>
   <div class="tab" onclick="show('p4',this)"><span class="tdot" style="background:var(--A)"></span>Chi Phí & Ẩn Phí</div>
-  <div class="tab" onclick="show('p5',this)"><span class="tdot" style="background:var(--P)"></span>Hiệu Suất Vận Hành</div>
+  <div class="tab" onclick="show('p5',this)"><span class="tdot" style="background:var(--V)"></span>Hiệu Suất Vận Hành</div>
   <div class="tab" onclick="show('p6',this)"><span class="tdot" style="background:var(--GM)"></span>Nhân Sự & Tổ Chức</div>
 </div>
 
 <div class="main">
 
-<!-- P1 TỔNG QUAN -->
+<!-- ========== P1 TỔNG QUAN ========== -->
 <div class="panel active" id="p1">
   <div class="strip">
     <div class="sti"><span class="cg">●</span> FTC đang vận hành bình thường</div>
@@ -210,469 +303,703 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:13px
     <div class="stsep"></div>
     <div class="sti cr">● 7 báo giá đang quá SLA 4h</div>
   </div>
+
   <div class="g4">
-    <div class="m"><div class="ma" style="background:var(--G)"></div>
-      <div class="ml">Doanh thu tháng 4 <span class="src se">Ước tính</span></div>
+    <div class="m" onclick="toggleExpand('ex1')">
+      <div class="ma" style="background:var(--G)"></div>
+      <div class="ml">Doanh thu tháng 4
+        <span class="src sx">Excel/Sheet<div class="tip">FTC nhập doanh thu theo lô hàng vào Google Sheet → tự động tổng hợp</div></span>
+      </div>
       <div class="mv cg">4.2 tỷ</div>
       <div class="ms cg">↑ 18% so tháng 3</div>
       <div class="mb"><div class="mf" style="width:62%;background:var(--G)"></div></div>
-      <div class="mn">Mục tiêu 6.8 tỷ · Đạt 62% · Cần tích hợp Misa để chính xác</div>
+      <div class="mn">Mục tiêu 6.8 tỷ · Đạt 62% · Nhấn để xem chi tiết</div>
+      <div class="m-expand" id="ex1">
+        <div class="mex-row"><span class="mex-label">Forwarder</span><span class="cg">2.6 tỷ</span></div>
+        <div class="mex-row"><span class="mex-label">Kho ICD</span><span class="cb">1.0 tỷ</span></div>
+        <div class="mex-row"><span class="mex-label">Xây dựng</span><span class="c3">0.6 tỷ</span></div>
+        <div class="mex-row"><span class="mex-label">Hải Phòng (lớn nhất)</span><span class="cg">1.4 tỷ</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--B)"></div>
-      <div class="ml">Lô hàng đang xử lý <span class="src sa">Base tự động</span></div>
+    <div class="m" onclick="toggleExpand('ex2')">
+      <div class="ma" style="background:var(--B)"></div>
+      <div class="ml">Lô hàng đang xử lý
+        <span class="src sa">Base<div class="tip">Base Workflow tự động đếm và phân loại theo trạng thái</div></span>
+      </div>
       <div class="mv cb">138</div>
       <div class="ms ca">12 lô cảnh báo DEM/DET</div>
       <div class="mb"><div class="mf" style="width:84%;background:var(--B)"></div></div>
-      <div class="mn">Đúng tiến độ: 116 · Trễ: 22 · Base Workflow tự cập nhật</div>
+      <div class="mn">Đúng tiến độ: 116 · Trễ: 22 · Nhấn để xem phân bổ</div>
+      <div class="m-expand" id="ex2">
+        <div class="mex-row"><span class="mex-label">Đang booking</span><span class="cb">38</span></div>
+        <div class="mex-row"><span class="mex-label">Khai báo HQ</span><span class="cb">27</span></div>
+        <div class="mex-row"><span class="mex-label">Thông quan</span><span class="cg">23</span></div>
+        <div class="mex-row"><span class="mex-label">Vận chuyển</span><span class="cg">11</span></div>
+        <div class="mex-row"><span class="mex-label">Rủi ro DEM/DET</span><span class="cr">12</span></div>
+        <div class="mex-row"><span class="mex-label">Đang trễ tiến độ</span><span class="ca">22</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--A)"></div>
-      <div class="ml">Tỷ lệ chuyển đổi báo giá <span class="src sa">Base tự động</span></div>
+    <div class="m" onclick="toggleExpand('ex3')">
+      <div class="ma" style="background:var(--A)"></div>
+      <div class="ml">Tỷ lệ chuyển đổi báo giá
+        <span class="src sa">Base<div class="tip">Base CRM tính từ số RFQ tạo và số booking xác nhận</div></span>
+      </div>
       <div class="mv ca">38%</div>
-      <div class="ms cg">↑ 8% so baseline</div>
+      <div class="ms cg">↑ 8% so baseline trước Base</div>
       <div class="mb"><div class="mf" style="width:38%;background:var(--A)"></div></div>
-      <div class="mn">94 RFQ · 36 booking · Base CRM tính tự động từ timestamp</div>
+      <div class="mn">94 RFQ nhận · 36 booking · Nhấn để xem theo Sales</div>
+      <div class="m-expand" id="ex3">
+        <div class="mex-row"><span class="mex-label">Nguyễn Minh</span><span class="cg">88%</span></div>
+        <div class="mex-row"><span class="mex-label">Trần Hoa</span><span class="cg">72%</span></div>
+        <div class="mex-row"><span class="mex-label">Lê Cường</span><span class="cb">61%</span></div>
+        <div class="mex-row"><span class="mex-label">Phạm Duy</span><span class="ca">44%</span></div>
+        <div class="mex-row"><span class="mex-label">Đỗ Trang</span><span class="cr">31%</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--R)"></div>
-      <div class="ml">Báo giá quá SLA 4h <span class="src sa">Base tự động</span></div>
+    <div class="m" onclick="toggleExpand('ex4')">
+      <div class="ma" style="background:var(--R)"></div>
+      <div class="ml">Báo giá quá SLA 4h
+        <span class="src sa">Base<div class="tip">Base CRM cảnh báo tự động khi vượt SLA đã cài đặt</div></span>
+      </div>
       <div class="mv cr">7</div>
       <div class="ms cr">3 báo giá trễ >3h — nguy cơ mất đơn</div>
       <div class="mb"><div class="mf" style="width:70%;background:var(--R)"></div></div>
-      <div class="mn">Base CRM cảnh báo tự động khi vượt SLA đã cài đặt</div>
-    </div>
-  </div>
-  <div class="g21">
-    <div class="card">
-      <div class="ch"><div class="ct">Doanh thu 6 tháng <span class="src se">Ước tính từ CRM — chính xác hơn khi tích hợp Misa</span></div></div>
-      <div class="cw" style="height:200px"><canvas id="c-rev"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Doanh thu theo chi nhánh T4 <span class="src se">Ước tính</span></div></div>
-      <div class="br2"><div class="bl2">Hà Nội</div><div class="bb2"><div class="bf" style="width:100%;background:var(--G)"></div></div><div class="bv cg">1.8 tỷ</div></div>
-      <div class="br2"><div class="bl2">Hải Phòng</div><div class="bb2"><div class="bf" style="width:78%;background:var(--B)"></div></div><div class="bv cb">1.4 tỷ</div></div>
-      <div class="br2"><div class="bl2">TP.HCM</div><div class="bb2"><div class="bf" style="width:39%;background:var(--GM)"></div></div><div class="bv cg">0.7 tỷ</div></div>
-      <div class="br2"><div class="bl2">Việt Trì</div><div class="bb2"><div class="bf" style="width:11%;background:var(--A)"></div></div><div class="bv ca">0.2 tỷ</div></div>
-      <div class="br2"><div class="bl2">Vĩnh Phúc</div><div class="bb2"><div class="bf" style="width:5%;background:var(--t4)"></div></div><div class="bv c3">0.1 tỷ</div></div>
-      <div style="border-top:1px solid var(--bdr);margin-top:12px;padding-top:12px">
-        <div class="sl">Theo loại dịch vụ</div>
-        <div class="br2"><div class="bl2">Forwarder</div><div class="bb2"><div class="bf" style="width:100%;background:var(--B)"></div></div><div class="bv cb">62%</div></div>
-        <div class="br2"><div class="bl2">Kho ICD</div><div class="bb2"><div class="bf" style="width:39%;background:var(--G)"></div></div><div class="bv cg">24%</div></div>
-        <div class="br2"><div class="bl2">Xây dựng</div><div class="bb2"><div class="bf" style="width:23%;background:var(--t4)"></div></div><div class="bv c3">14%</div></div>
+      <div class="mn">Base CRM đã nhắc tự động · Nhấn để xem danh sách</div>
+      <div class="m-expand" id="ex4">
+        <div class="mex-row"><span class="mex-label">Posco Vietnam (Đỗ Trang)</span><span class="cr">+3.2h</span></div>
+        <div class="mex-row"><span class="mex-label">LG Innotek (Phạm Duy)</span><span class="cr">+2.8h</span></div>
+        <div class="mex-row"><span class="mex-label">Samsung Vina (Đỗ Trang)</span><span class="ca">+1.1h</span></div>
       </div>
     </div>
   </div>
-  <div class="g2">
+
+  <div class="g21">
     <div class="card">
-      <div class="ch"><div class="ct">Cảnh báo ưu tiên cần xử lý ngay <span class="src sa">Base tự động</span></div></div>
-      <div class="ar"><div class="ad adr"></div><div><div class="at">Lô FTC-089: DEM phát sinh hôm nay — cần thông quan ngay tại Hải Phòng</div><div class="am">Container TCKU3429 · Ước tính phí: ~3.2 triệu nếu không xử lý hôm nay</div></div><div style="margin-left:auto"><span class="b br">Khẩn</span></div></div>
-      <div class="ar"><div class="ad adr"></div><div><div class="at">Rủi ro kép: Lô FTC-074 sắp DEM + nhân viên phụ trách đang nghỉ phép</div><div class="am">Anh Minh (Ops) nghỉ đến 03/04 · Base HRM + Workflow cross-cảnh báo tự động</div></div><div style="margin-left:auto"><span class="b br">Rủi ro kép</span></div></div>
-      <div class="ar"><div class="ad adr"></div><div><div class="at">3 báo giá trễ SLA >3h: Posco Vietnam, LG Innotek, Samsung Vina</div><div class="am">Sales: Đỗ Trang, Phạm Duy · Base CRM đã gửi nhắc nhở tự động lần 2</div></div><div style="margin-left:auto"><span class="b br">Ngay</span></div></div>
-      <div class="ar"><div class="ad ada"></div><div><div class="at">Kho ngoại quan Hải Phòng đạt 87% công suất — cần điều phối xuất kho</div><div class="am">Hàng tồn tăng 23% so tháng trước · Base Workflow đã tạo task cho kho</div></div><div style="margin-left:auto"><span class="b ba">Cảnh báo</span></div></div>
-      <div class="ar"><div class="ad ada"></div><div><div class="at">Khách Hyundai MM chưa đặt hàng 45 ngày — Sales cần liên hệ ngay</div><div class="am">KH VIP · TB 280 triệu/tháng · Base CRM phát hiện tự động theo chu kỳ</div></div><div style="margin-left:auto"><span class="b ba">Theo dõi</span></div></div>
-      <div class="ar"><div class="ad adg"></div><div><div class="at">Hợp đồng Q2 Lotte Chemical vừa ký xong — 680 triệu/quý</div><div class="am">Sales Hải Phòng · Bắt đầu từ 05/04/2026 · Đã tạo lô đầu tiên trên Base</div></div><div style="margin-left:auto"><span class="b bg2">Tốt</span></div></div>
+      <div class="ch">
+        <div class="ct">Doanh thu 6 tháng <span class="src sx">Excel/Sheet<div class="tip">FTC duy trì Google Sheet doanh thu theo tháng/chi nhánh/dịch vụ</div></span></div>
+        <div style="display:flex;gap:6px">
+          <span class="b bg2">Forwarder</span><span class="b bb">Kho ICD</span><span class="b bgr">Xây dựng</span>
+        </div>
+      </div>
+      <div class="cw" style="height:195px"><canvas id="c-rev"></canvas></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Hoạt động gần nhất <span class="src sa">Base tự động</span></div></div>
+      <div class="ch"><div class="ct">Doanh thu theo chi nhánh T4 <span class="src sx">Excel/Sheet<div class="tip">Trưởng chi nhánh cập nhật Sheet cuối tuần</div></span></div></div>
+      <div class="br2"><div class="bl2">Hà Nội</div><div class="bb2"><div class="bf" style="width:100%;background:var(--G)"></div></div><div class="bv2 cg">1.8 tỷ</div></div>
+      <div class="br2"><div class="bl2">Hải Phòng</div><div class="bb2"><div class="bf" style="width:78%;background:var(--B)"></div></div><div class="bv2 cb">1.4 tỷ</div></div>
+      <div class="br2"><div class="bl2">TP.HCM</div><div class="bb2"><div class="bf" style="width:39%;background:var(--GM)"></div></div><div class="bv2 cg">0.7 tỷ</div></div>
+      <div class="br2"><div class="bl2">Việt Trì</div><div class="bb2"><div class="bf" style="width:11%;background:var(--A)"></div></div><div class="bv2 ca">0.2 tỷ</div></div>
+      <div class="br2"><div class="bl2">Vĩnh Phúc</div><div class="bb2"><div class="bf" style="width:5%;background:var(--t4)"></div></div><div class="bv2 c3">0.1 tỷ</div></div>
+      <div style="border-top:1px solid var(--bdr);margin-top:11px;padding-top:11px">
+        <div class="sl">Theo loại dịch vụ</div>
+        <div class="br2"><div class="bl2">Forwarder</div><div class="bb2"><div class="bf" style="width:100%;background:var(--B)"></div></div><div class="bv2 cb">62%</div></div>
+        <div class="br2"><div class="bl2">Kho ICD</div><div class="bb2"><div class="bf" style="width:39%;background:var(--G)"></div></div><div class="bv2 cg">24%</div></div>
+        <div class="br2"><div class="bl2">Xây dựng</div><div class="bb2"><div class="bf" style="width:23%;background:var(--t4)"></div></div><div class="bv2 c3">14%</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="ch"><div class="ct">Cảnh báo ưu tiên <span class="src sa">Base<div class="tip">Base tự động cross-check Workflow + HRM + CRM để tạo cảnh báo</div></span></div></div>
+      <div class="ar" onclick="toggleAlert(this)">
+        <div class="ad adr"></div>
+        <div style="flex:1"><div class="at">Lô FTC-089 phát sinh phí DEM hôm nay tại Hải Phòng</div><div class="am">Container TCKU3429 · Free time: 0 ngày · ~3.2 triệu</div>
+          <div class="ar-detail">Hãng tàu: Evergreen · Tuyến HP → Seoul · Ops phụ trách: Nguyễn Bình · Đã liên hệ hải quan lúc 08:47 · Dự kiến thông quan chiều nay.</div>
+        </div><div style="margin-left:auto"><span class="b br">Khẩn</span></div>
+      </div>
+      <div class="ar" onclick="toggleAlert(this)">
+        <div class="ad adr"></div>
+        <div style="flex:1"><div class="at">Rủi ro kép: Lô FTC-074 sắp DEM + nhân viên phụ trách đang nghỉ phép</div><div class="am">Anh Minh (Ops) nghỉ đến 03/04 · Base HRM + Workflow cross-cảnh báo</div>
+          <div class="ar-detail">Container MSCU8821 · Tuyến HN → Singapore · Free time còn 1 ngày · Cần phân công Trần Hoa hoặc Lê Văn Nam thay thế ngay hôm nay.</div>
+        </div><div style="margin-left:auto"><span class="b br">Rủi ro kép</span></div>
+      </div>
+      <div class="ar" onclick="toggleAlert(this)">
+        <div class="ad adr"></div>
+        <div style="flex:1"><div class="at">3 báo giá trễ SLA >3h: Posco Vietnam, LG Innotek, Samsung Vina</div><div class="am">Sales: Đỗ Trang, Phạm Duy · Base CRM đã nhắc tự động lần 2</div>
+          <div class="ar-detail">Posco: RFQ ngày 01/04 07:30 · LG: RFQ 08:15 · Samsung: RFQ 09:00 · Cả 3 đều là khách FDI Hàn, yêu cầu phản hồi nhanh. Cần Sales phản hồi trong 30 phút tới.</div>
+        </div><div style="margin-left:auto"><span class="b br">Ngay</span></div>
+      </div>
+      <div class="ar" onclick="toggleAlert(this)">
+        <div class="ad ada"></div>
+        <div style="flex:1"><div class="at">Kho ngoại quan Hải Phòng đạt 87% công suất</div><div class="am">Hàng tồn tăng 23% so tháng trước · AppSheet kho báo cáo</div>
+          <div class="ar-detail">Kho còn ~3.250m² trống. Lô hàng Samsung SDI dự kiến nhập thêm 2.100m² cuối tuần này. Cần điều phối xuất kho cho lô Lotte Chemical trước 03/04.</div>
+        </div><div style="margin-left:auto"><span class="b ba">Cảnh báo</span></div>
+      </div>
+      <div class="ar" onclick="toggleAlert(this)">
+        <div class="ad ada"></div>
+        <div style="flex:1"><div class="at">Khách Hyundai MM chưa đặt hàng 45 ngày</div><div class="am">KH VIP · TB 280 triệu/tháng · Base CRM phát hiện tự động</div>
+          <div class="ar-detail">Lần cuối đặt hàng: 15/02/2026. Lịch sử: đặt đều 2 lần/tháng. Liên hệ phụ trách: Sales Nguyễn Minh. Đề xuất: gọi điện hỏi thăm và offer ưu đãi cước Q2.</div>
+        </div><div style="margin-left:auto"><span class="b ba">Theo dõi</span></div>
+      </div>
+      <div class="ar" onclick="toggleAlert(this)">
+        <div class="ad adg"></div>
+        <div style="flex:1"><div class="at">Hợp đồng Q2 Lotte Chemical vừa ký — 680 triệu/quý</div><div class="am">Sales Hải Phòng · Bắt đầu từ 05/04/2026</div>
+          <div class="ar-detail">Hợp đồng 3 tháng Q2/2026. Dịch vụ: Forwarder HP → Busan và HP → Tokyo. Tần suất: 12 lô/tháng. Đã tạo template workflow riêng trên Base.</div>
+        </div><div style="margin-left:auto"><span class="b bg2">Tốt</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ch"><div class="ct">Hoạt động gần nhất <span class="src sa">Base<div class="tip">Base tự động ghi lại mọi thay đổi trạng thái trong hệ thống</div></span></div></div>
       <div class="tl">
-        <div class="tli"><div class="tldot" style="background:var(--R)"></div><div class="tltime">08:45 hôm nay</div><div class="tltext">Lô FTC-089 kích hoạt cảnh báo DEM tự động</div><div class="tlsub">Ops Hải Phòng được thông báo qua Base Message</div></div>
-        <div class="tli"><div class="tldot" style="background:var(--G)"></div><div class="tltime">08:12 hôm nay</div><div class="tltext">Lô FTC-081 hoàn thành thông quan — đúng hạn</div><div class="tlsub">Samsung SDI · Cảng Hải Phòng · Chuyển bước điều độ xe</div></div>
-        <div class="tli"><div class="tldot" style="background:var(--A)"></div><div class="tltime">07:30 hôm nay</div><div class="tltext">Sales Đỗ Trang nhận RFQ từ Posco Vietnam</div><div class="tlsub">Chưa phản hồi · Đã qua 1.5h · Base CRM đã nhắc lần 1</div></div>
-        <div class="tli"><div class="tldot" style="background:var(--G)"></div><div class="tltime">Hôm qua 17:22</div><div class="tltext">Hợp đồng Lotte Chemical Q2 được phê duyệt trên Base</div><div class="tlsub">Trưởng phòng Sale ký duyệt · Base Request lưu toàn bộ hồ sơ</div></div>
-        <div class="tli"><div class="tldot" style="background:var(--B)"></div><div class="tltime">Hôm qua 15:00</div><div class="tltext">Cập nhật công suất kho HP lên 87%</div><div class="tlsub">Đề xuất điều phối xuất kho đã được gửi lên Base Request</div></div>
+        <div class="tli"><div class="tldot" style="background:var(--R)"></div><div class="tltime">08:45 hôm nay</div><div class="tltext">Lô FTC-089 kích hoạt cảnh báo DEM tự động</div><div class="tlsub">Ops Hải Phòng nhận thông báo qua Base Message</div></div>
+        <div class="tli"><div class="tldot" style="background:var(--G)"></div><div class="tltime">08:12 hôm nay</div><div class="tltext">Lô FTC-081 hoàn thành thông quan — đúng hạn</div><div class="tlsub">Samsung SDI · Cảng Hải Phòng · Đã chuyển bước điều độ xe</div></div>
+        <div class="tli"><div class="tldot" style="background:var(--A)"></div><div class="tltime">07:30 hôm nay</div><div class="tltext">Sales Đỗ Trang nhận RFQ từ Posco Vietnam</div><div class="tlsub">Chưa phản hồi · Base CRM đã nhắc lần 1 lúc 09:30</div></div>
+        <div class="tli"><div class="tldot" style="background:var(--G)"></div><div class="tltime">Hôm qua 17:22</div><div class="tltext">Hợp đồng Lotte Chemical Q2 được phê duyệt</div><div class="tlsub">Trưởng phòng Sale ký duyệt trên Base Request</div></div>
+        <div class="tli"><div class="tldot" style="background:var(--B)"></div><div class="tltime">Hôm qua 15:00</div><div class="tltext">Kho HP báo cáo công suất 87% qua AppSheet</div><div class="tlsub">Đề xuất điều phối đã được gửi lên Base Request</div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- P2 RỦI RO -->
+<!-- ========== P2 RỦI RO ========== -->
 <div class="panel" id="p2">
   <div class="g4">
-    <div class="m"><div class="ma" style="background:var(--R)"></div>
-      <div class="ml">Lô hàng rủi ro DEM/DET <span class="src si">Base + FTC nhập free time</span></div>
-      <div class="mv cr">12</div>
-      <div class="ms cr">3 lô cần xử lý trong 24h tới</div>
-      <div class="mn">FTC nhập "free time" khi tạo lô → Base tự cảnh báo theo ngày</div>
+    <div class="m" onclick="toggleExpand('r1')">
+      <div class="ma" style="background:var(--R)"></div>
+      <div class="ml">Lô hàng rủi ro DEM/DET <span class="src si">Base + Sheet<div class="tip">FTC nhập free time container vào Sheet → Base so sánh và cảnh báo theo ngày</div></span></div>
+      <div class="mv cr">12</div><div class="ms cr">3 lô cần xử lý trong 24h</div>
+      <div class="mn">Nhấn để xem phân bổ theo chi nhánh</div>
+      <div class="m-expand" id="r1">
+        <div class="mex-row"><span class="mex-label">Hà Nội</span><span class="cr">4 lô</span></div>
+        <div class="mex-row"><span class="mex-label">Hải Phòng</span><span class="cr">6 lô</span></div>
+        <div class="mex-row"><span class="mex-label">TP.HCM</span><span class="ca">2 lô</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--R)"></div>
-      <div class="ml">Thiệt hại DEM/DET ước tính <span class="src si">Base + bảng giá hãng tàu</span></div>
-      <div class="mv cr">~42tr</div>
-      <div class="ms cr">Nếu không xử lý kịp hôm nay</div>
-      <div class="mn">FTC nhập đơn giá DEM/DET theo hãng tàu → Base tính tự động</div>
+    <div class="m" onclick="toggleExpand('r2')">
+      <div class="ma" style="background:var(--R)"></div>
+      <div class="ml">Thiệt hại DEM/DET hôm nay <span class="src si">Base + Sheet đơn giá<div class="tip">FTC nhập bảng đơn giá DEM/DET theo hãng tàu vào Sheet → Base tính phí theo container và free time</div></span></div>
+      <div class="mv cr">~42tr</div><div class="ms cr">Nếu không xử lý kịp hôm nay</div>
+      <div class="mn">Nhấn để xem chi tiết từng lô</div>
+      <div class="m-expand" id="r2">
+        <div class="mex-row"><span class="mex-label">FTC-089 (Evergreen)</span><span class="cr">~3.2tr</span></div>
+        <div class="mex-row"><span class="mex-label">FTC-074 (MSC)</span><span class="cr">~2.8tr</span></div>
+        <div class="mex-row"><span class="mex-label">FTC-081 (Hapag)</span><span class="ca">~2.1tr</span></div>
+        <div class="mex-row"><span class="mex-label">9 lô còn lại</span><span class="c3">~33.9tr</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--A)"></div>
-      <div class="ml">Rủi ro phụ thuộc KH <span class="src sa">Base CRM tự động</span></div>
-      <div class="mv ca">41%</div>
-      <div class="ms ca">Top 3 KH chiếm 41% doanh thu</div>
-      <div class="mn">Base CRM phân tích tỷ trọng doanh thu tự động theo lịch sử</div>
+    <div class="m" onclick="toggleExpand('r3')">
+      <div class="ma" style="background:var(--A)"></div>
+      <div class="ml">Rủi ro phụ thuộc KH <span class="src sa">Base CRM<div class="tip">Base CRM tự động tính tỷ trọng doanh thu từng khách hàng</div></span></div>
+      <div class="mv ca">41%</div><div class="ms ca">Top 3 KH chiếm 41% doanh thu</div>
+      <div class="mn">Nhấn để xem danh sách top KH</div>
+      <div class="m-expand" id="r3">
+        <div class="mex-row"><span class="mex-label">Samsung SDI</span><span class="cr">18%</span></div>
+        <div class="mex-row"><span class="mex-label">Lotte Chemical</span><span class="ca">13%</span></div>
+        <div class="mex-row"><span class="mex-label">Hyundai MM</span><span class="ca">10%</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--A)"></div>
-      <div class="ml">Lô hàng trễ tiến độ <span class="src sa">Base Workflow tự động</span></div>
-      <div class="mv ca">22</div>
-      <div class="ms ca">16% tổng lô · Mục tiêu &lt;10%</div>
-      <div class="mn">So sánh ngày hoàn thành thực tế vs deadline đã cài đặt trong Workflow</div>
+    <div class="m" onclick="toggleExpand('r4')">
+      <div class="ma" style="background:var(--A)"></div>
+      <div class="ml">Lô hàng trễ tiến độ <span class="src sa">Base Workflow<div class="tip">So sánh deadline cài đặt trong Workflow vs ngày hoàn thành thực tế</div></span></div>
+      <div class="mv ca">22</div><div class="ms ca">16% tổng lô · Mục tiêu &lt;10%</div>
+      <div class="mn">Nhấn để xem theo bước quy trình</div>
+      <div class="m-expand" id="r4">
+        <div class="mex-row"><span class="mex-label">Trễ ở bước Khai báo HQ</span><span class="cr">9 lô</span></div>
+        <div class="mex-row"><span class="mex-label">Trễ ở bước Thông quan</span><span class="ca">8 lô</span></div>
+        <div class="mex-row"><span class="mex-label">Trễ ở bước Điều độ xe</span><span class="ca">5 lô</span></div>
+      </div>
     </div>
   </div>
+
   <div class="g21">
     <div class="card">
-      <div class="ch"><div class="ct">Danh sách DEM/DET — ưu tiên xử lý <span class="src si">Base + FTC nhập free time & đơn giá hãng tàu</span></div></div>
+      <div class="ch"><div class="ct">Danh sách DEM/DET — ưu tiên xử lý <span class="src si">Base + Sheet free time & đơn giá<div class="tip">FTC nhập free time khi booking → Base theo dõi tự động. Đơn giá DEM/DET từ Sheet hãng tàu</div></span></div></div>
       <table class="tbl">
-        <tr><th>Mã lô</th><th>Container</th><th>Tuyến</th><th>Free time còn lại</th><th>Est. Phí</th><th>Ops phụ trách</th><th>Trạng thái</th></tr>
-        <tr><td class="mono">FTC-089</td><td class="mono">TCKU3429</td><td>HP → Seoul</td><td style="color:var(--R);font-weight:700">0 ngày</td><td class="mono cr">~3.2tr</td><td>Nguyễn Bình</td><td><span class="b br">Khẩn cấp</span></td></tr>
-        <tr><td class="mono">FTC-074</td><td class="mono">MSCU8821</td><td>HN → Singapore</td><td style="color:var(--R);font-weight:600">1 ngày</td><td class="mono cr">~2.8tr</td><td><span class="ca">Minh (nghỉ phép)</span></td><td><span class="b br">Rủi ro kép</span></td></tr>
-        <tr><td class="mono">FTC-081</td><td class="mono">HLCU4410</td><td>HP → Tokyo</td><td class="ca" style="font-weight:600">2 ngày</td><td class="mono ca">~2.1tr</td><td>Trần Hoa</td><td><span class="b ba">Cảnh báo</span></td></tr>
-        <tr><td class="mono">FTC-092</td><td class="mono">YMLU7733</td><td>HCM → Hamburg</td><td>3 ngày</td><td class="mono">~1.5tr</td><td>Lê Cường</td><td><span class="b bb">Theo dõi</span></td></tr>
-        <tr><td class="mono">FTC-068</td><td class="mono">OOLU9912</td><td>HP → Busan</td><td>3 ngày</td><td class="mono">~1.2tr</td><td>Phạm Lan</td><td><span class="b bb">Theo dõi</span></td></tr>
-        <tr><td class="mono">FTC-077</td><td class="mono">CSNU4421</td><td>HN → Rotterdam</td><td>5 ngày</td><td class="mono">~0.8tr</td><td>Đỗ Quang</td><td><span class="b bg2">Bình thường</span></td></tr>
+        <tr><th></th><th>Mã lô</th><th>Container</th><th>Tuyến</th><th>Free time</th><th>Est. Phí</th><th>Ops phụ trách</th><th>Trạng thái</th></tr>
+        <tr class="expandable" onclick="toggleRow('dem1')">
+          <td></td><td class="mono">FTC-089</td><td class="mono">TCKU3429</td><td>HP → Seoul</td>
+          <td style="color:var(--R);font-weight:700">0 ngày</td><td class="mono cr">~3.2tr</td><td>Nguyễn Bình</td><td><span class="b br">Khẩn cấp</span></td>
+        </tr>
+        <tr class="sub-row" id="dem1"><td colspan="8">Hãng tàu: Evergreen · Cảng HP · Thông quan chậm do hồ sơ thiếu C/O · Liên hệ hải quan: 08:47 · Dự kiến thông quan chiều 01/04</td></tr>
+        <tr class="expandable" onclick="toggleRow('dem2')">
+          <td></td><td class="mono">FTC-074</td><td class="mono">MSCU8821</td><td>HN → Singapore</td>
+          <td style="color:var(--R);font-weight:600">1 ngày</td><td class="mono cr">~2.8tr</td><td><span class="ca">Minh (nghỉ phép)</span></td><td><span class="b br">Rủi ro kép</span></td>
+        </tr>
+        <tr class="sub-row" id="dem2"><td colspan="8">Hãng tàu: MSC · Anh Minh nghỉ phép đến 03/04 · Cần chuyển giao cho Trần Hoa hôm nay · Booking tàu: 02/04 15:00</td></tr>
+        <tr class="expandable" onclick="toggleRow('dem3')">
+          <td></td><td class="mono">FTC-081</td><td class="mono">HLCU4410</td><td>HP → Tokyo</td>
+          <td class="ca" style="font-weight:600">2 ngày</td><td class="mono ca">~2.1tr</td><td>Trần Hoa</td><td><span class="b ba">Cảnh báo</span></td>
+        </tr>
+        <tr class="sub-row" id="dem3"><td colspan="8">Hãng tàu: Hapag-Lloyd · Đang ở bước làm hàng tại cảng · Cần hoàn thành trước 03/04 08:00 · Đã xếp lịch cho tổ bốc dỡ</td></tr>
+        <tr class="expandable" onclick="toggleRow('dem4')">
+          <td></td><td class="mono">FTC-092</td><td class="mono">YMLU7733</td><td>HCM → Hamburg</td>
+          <td>3 ngày</td><td class="mono">~1.5tr</td><td>Lê Cường</td><td><span class="b bb">Theo dõi</span></td>
+        </tr>
+        <tr class="sub-row" id="dem4"><td colspan="8">Hãng tàu: Yang Ming · Đang thông quan · Dự kiến hoàn thành 02/04 · Không có rủi ro nếu tiến độ giữ nguyên</td></tr>
+        <tr class="expandable" onclick="toggleRow('dem5')">
+          <td></td><td class="mono">FTC-068</td><td class="mono">OOLU9912</td><td>HP → Busan</td>
+          <td>3 ngày</td><td class="mono">~1.2tr</td><td>Phạm Lan</td><td><span class="b bb">Theo dõi</span></td>
+        </tr>
+        <tr class="sub-row" id="dem5"><td colspan="8">Hãng tàu: OOCL · Đang khai báo HQ · Phạm Lan đang theo dõi · Cần hoàn thành trước 03/04</td></tr>
       </table>
-      <div class="hl hlr"><div class="hlt">Lô FTC-074 là <strong>rủi ro kép</strong>: sắp DEM trong 1 ngày nhưng nhân viên phụ trách đang nghỉ phép đến 03/04. Base cross-reference HRM + Workflow để cảnh báo — cần phân công người thay thế ngay.</div></div>
+      <div class="hl hlr"><div class="hlt">FTC-074 là <strong>rủi ro kép</strong>: sắp DEM + nhân viên nghỉ phép. Base cross-reference HRM + Workflow để cảnh báo — chức năng này chỉ có khi dùng cùng 1 nền tảng.</div></div>
     </div>
     <div>
       <div class="card" style="margin-bottom:12px">
-        <div class="ch"><div class="ct">DEM/DET theo tháng (triệu đồng) <span class="src si">Cần nhập lịch sử ban đầu · Từ tháng triển khai Base trở đi tự động</span></div></div>
-        <div class="cw" style="height:130px"><canvas id="c-dem"></canvas></div>
-        <div class="hl hla"><div class="hlt">Xu hướng tăng liên tục 6 tháng. Nguyên nhân: không có cảnh báo sớm. Base giải quyết bằng cách cảnh báo khi còn 2-3 ngày free time.</div></div>
+        <div class="ch"><div class="ct">DEM/DET theo tháng (triệu đồng) <span class="src si">Base + Sheet lịch sử<div class="tip">Từ tháng triển khai Base trở đi tự động. Lịch sử trước đó nhập 1 lần từ Excel</div></span></div></div>
+        <div class="cw" style="height:125px"><canvas id="c-dem"></canvas></div>
+        <div class="hl hla"><div class="hlt">Tăng liên tục 6 tháng vì không có cảnh báo sớm. Base giải quyết bằng cảnh báo khi còn 2-3 ngày free time.</div></div>
       </div>
       <div class="card">
-        <div class="ch"><div class="ct">Rủi ro phụ thuộc KH <span class="src sa">Base CRM</span></div></div>
-        <div class="br2"><div class="bl2">Samsung SDI</div><div class="bb2"><div class="bf" style="width:100%;background:var(--R)"></div></div><div class="bv cr">18%</div></div>
-        <div class="br2"><div class="bl2">Lotte Chem</div><div class="bb2"><div class="bf" style="width:72%;background:var(--A)"></div></div><div class="bv ca">13%</div></div>
-        <div class="br2"><div class="bl2">Hyundai MM</div><div class="bb2"><div class="bf" style="width:55%;background:var(--A)"></div></div><div class="bv ca">10%</div></div>
-        <div class="br2"><div class="bl2">LG Innotek</div><div class="bb2"><div class="bf" style="width:44%;background:var(--B)"></div></div><div class="bv cb">8%</div></div>
-        <div class="br2"><div class="bl2">Posco VN</div><div class="bb2"><div class="bf" style="width:33%;background:var(--B)"></div></div><div class="bv cb">6%</div></div>
+        <div class="ch"><div class="ct">Phụ thuộc khách hàng <span class="src sa">Base CRM<div class="tip">Base CRM tính tự động từ lịch sử đơn hàng</div></span></div></div>
+        <div class="br2"><div class="bl2">Samsung SDI</div><div class="bb2"><div class="bf" style="width:100%;background:var(--R)"></div></div><div class="bv2 cr">18%</div></div>
+        <div class="br2"><div class="bl2">Lotte Chem</div><div class="bb2"><div class="bf" style="width:72%;background:var(--A)"></div></div><div class="bv2 ca">13%</div></div>
+        <div class="br2"><div class="bl2">Hyundai MM</div><div class="bb2"><div class="bf" style="width:55%;background:var(--A)"></div></div><div class="bv2 ca">10%</div></div>
+        <div class="br2"><div class="bl2">LG Innotek</div><div class="bb2"><div class="bf" style="width:44%;background:var(--B)"></div></div><div class="bv2 cb">8%</div></div>
+        <div class="br2"><div class="bl2">Posco VN</div><div class="bb2"><div class="bf" style="width:33%;background:var(--B)"></div></div><div class="bv2 cb">6%</div></div>
+        <div class="hl hla"><div class="hlt">Top 3 KH chiếm 41% doanh thu. Mất 1 KH = mất 10–18% doanh thu ngay lập tức.</div></div>
       </div>
     </div>
   </div>
+
   <div class="g3">
     <div class="card">
-      <div class="ch"><div class="ct">Rủi ro giá cước không đồng nhất <span class="src sa">Base CRM + Office</span></div></div>
-      <div class="ri"><div class="ric" style="background:var(--RL)">⚡</div><div><div class="rit">HN vs HCM — Tuyến HCM → Busan</div><div class="rid">HN báo 18.5tr · HCM báo 17.2tr · Khách nhận 2 báo giá khác nhau từ 2 chi nhánh FTC</div></div><div class="riv cr">-7%</div></div>
-      <div class="ri"><div class="ric" style="background:var(--AL)">⚡</div><div><div class="rit">HP vs HN — Tuyến HN → Rotterdam</div><div class="rid">HP báo 42tr · HN báo 44tr · Khách đã phát hiện và phàn nàn trực tiếp</div></div><div class="riv ca">-5%</div></div>
-      <div class="hl hlr"><div class="hlt">Rủi ro uy tín nghiêm trọng nhất. Base Office đồng bộ bảng giá cước toàn chi nhánh → xóa hoàn toàn vấn đề này.</div></div>
+      <div class="ch"><div class="ct">Rủi ro giá cước không đồng nhất <span class="src sa">Base CRM + Office<div class="tip">Base Office đồng bộ bảng giá cước toàn chi nhánh — giải quyết triệt để vấn đề này</div></span></div></div>
+      <div class="ri" onclick="toggleRisk(this)">
+        <div class="ric" style="background:var(--RL)">⚡</div>
+        <div style="flex:1"><div class="rit">HN vs HCM — Tuyến HCM → Busan</div><div class="rid">HN báo 18.5tr · HCM báo 17.2tr · Chênh 1.3 triệu</div>
+          <div class="ri-sub">Khách phát hiện khi so sánh 2 email báo giá. Đây là sự cố thực tế đã xảy ra tháng 3. Base Office với bảng giá đồng bộ sẽ xóa vấn đề này hoàn toàn.</div>
+        </div><div class="riv cr">-7%</div>
+      </div>
+      <div class="ri" onclick="toggleRisk(this)">
+        <div class="ric" style="background:var(--AL)">⚡</div>
+        <div style="flex:1"><div class="rit">HP vs HN — Tuyến HN → Rotterdam</div><div class="rid">HP báo 42tr · HN báo 44tr · Khách phàn nàn trực tiếp</div>
+          <div class="ri-sub">Nguyên nhân: mỗi chi nhánh tự cập nhật giá cước riêng trên Excel khác nhau. Khi phí cảng thay đổi, không ai đồng bộ cho chi nhánh kia.</div>
+        </div><div class="riv ca">-5%</div>
+      </div>
+      <div class="hl hlr"><div class="hlt">Rủi ro uy tín nghiêm trọng nhất với khách FDI Hàn/Nhật. Base Office giải quyết bằng 1 bảng giá trung tâm toàn chi nhánh.</div></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Rủi ro tuân thủ pháp lý <span class="src si">Base Workflow + FTC nhập deadline HQ</span></div></div>
-      <div class="ri"><div class="ric" style="background:var(--RL)">🏭</div><div><div class="rit">Kho ngoại quan HP</div><div class="rid">3 lô chưa cập nhật hồ sơ điện tử · Deadline HQ: 03/04 · Base Workflow sẽ cảnh báo tự động</div></div><div class="riv cr">3 lô</div></div>
-      <div class="ri"><div class="ric" style="background:var(--AL)">⚗️</div><div><div class="rit">Kho hóa chất Vĩnh Phúc</div><div class="rid">Giấy phép lưu trữ hóa chất gia hạn tháng 05 · Cần chuẩn bị hồ sơ</div></div><div class="riv ca">27 ngày</div></div>
-      <div class="ri"><div class="ric" style="background:var(--GL)">📋</div><div><div class="rit">Khai báo hải quan điện tử</div><div class="rid">98% đơn khai báo đúng hạn tháng 3 · Mức tốt của ngành</div></div><div class="riv cg">98%</div></div>
+      <div class="ch"><div class="ct">Rủi ro tuân thủ pháp lý <span class="src si">Base Workflow + AppSheet<div class="tip">Nhân viên kho nhập hồ sơ qua AppSheet → Base Workflow theo dõi deadline hải quan</div></span></div></div>
+      <div class="ri" onclick="toggleRisk(this)">
+        <div class="ric" style="background:var(--RL)">🏭</div>
+        <div style="flex:1"><div class="rit">Kho ngoại quan HP — 3 lô chưa cập nhật hồ sơ</div><div class="rid">Deadline Hải quan: 03/04 · Base Workflow cảnh báo tự động</div>
+          <div class="ri-sub">Lô FTC-044, FTC-051, FTC-057. Nguyên nhân: nhân viên kho nhập AppSheet chậm. Cần nhắc nhở ngay hôm nay để kịp deadline.</div>
+        </div><div class="riv cr">3 lô</div>
+      </div>
+      <div class="ri" onclick="toggleRisk(this)">
+        <div class="ric" style="background:var(--AL)">⚗️</div>
+        <div style="flex:1"><div class="rit">Kho hóa chất Vĩnh Phúc — giấy phép sắp hết hạn</div><div class="rid">Gia hạn tháng 05 · Cần chuẩn bị hồ sơ từ bây giờ</div>
+          <div class="ri-sub">Giấy phép lưu trữ hóa chất hiện hành hết hạn 15/05/2026. Hồ sơ gia hạn cần nộp trước 30 ngày. Deadline nộp hồ sơ: 15/04 — còn 14 ngày.</div>
+        </div><div class="riv ca">27 ngày</div>
+      </div>
+      <div class="ri" onclick="toggleRisk(this)">
+        <div class="ric" style="background:var(--GL)">📋</div>
+        <div style="flex:1"><div class="rit">Khai báo hải quan điện tử tháng 3</div><div class="rid">98% đơn khai báo đúng hạn · Mức tốt của ngành</div>
+          <div class="ri-sub">2% sai hạn là 4 lô trong 180 lô tháng 3. Tất cả do nhập sai trọng lượng hàng hóa. Cần bổ sung validation trên AppSheet nhập liệu.</div>
+        </div><div class="riv cg">98%</div>
+      </div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Rủi ro nhân sự chủ chốt <span class="src sa">Base HRM + CRM</span></div></div>
-      <div class="ri"><div class="ric" style="background:var(--RL)">👤</div><div><div class="rit">Trưởng phòng Sale — đang tuyển</div><div class="rid">Chưa có người · Đội sale vận hành không có người dẫn dắt · Rủi ro cao</div></div><div class="riv cr">Thiếu</div></div>
-      <div class="ri"><div class="ric" style="background:var(--AL)">📊</div><div><div class="rit">Data KH nằm trong đầu Sales</div><div class="rid">3 Sales cao cấp nắm data KH không có trong hệ thống · Rủi ro khi nghỉ việc</div></div><div class="riv ca">3 người</div></div>
-      <div class="ri"><div class="ric" style="background:var(--AL)">🔄</div><div><div class="rit">Turnover 6 tháng gần nhất</div><div class="rid">4 nhân viên nghỉ việc · 2 người từ bộ phận Ops · Data theo người</div></div><div class="riv ca">4 người</div></div>
-      <div class="hl hlb"><div class="hlt">Base CRM lưu toàn bộ lịch sử tương tác KH → data không mất theo người nghỉ việc.</div></div>
+      <div class="ch"><div class="ct">Rủi ro nhân sự chủ chốt <span class="src sa">Base HRM + CRM<div class="tip">Base HRM theo dõi nhân sự, Base CRM lưu lịch sử KH → cross-check để phát hiện rủi ro</div></span></div></div>
+      <div class="ri" onclick="toggleRisk(this)">
+        <div class="ric" style="background:var(--RL)">👤</div>
+        <div style="flex:1"><div class="rit">Trưởng phòng Sale — đang tuyển</div><div class="rid">Đội sale vận hành thiếu người dẫn dắt từ 2 tháng nay</div>
+          <div class="ri-sub">2 tháng không có Trưởng phòng Sale: tỷ lệ chuyển đổi báo giá giảm từ 45% xuống 38%, thời gian phản hồi tăng từ 2.5h lên 3.2h. Cần tuyển gấp.</div>
+        </div><div class="riv cr">Thiếu</div>
+      </div>
+      <div class="ri" onclick="toggleRisk(this)">
+        <div class="ric" style="background:var(--AL)">📊</div>
+        <div style="flex:1"><div class="rit">Data KH trong đầu 3 Sales không có trong Base</div><div class="rid">Nếu nghỉ việc → mất toàn bộ lịch sử KH đó</div>
+          <div class="ri-sub">3 Sales cao cấp (Minh, Hoa, Nam) mỗi người quản lý 15-20 KH nhưng toàn bộ note, lịch sử trao đổi, giá đã báo đang nằm trong Zalo cá nhân và bộ nhớ. Base CRM sẽ giải quyết triệt để.</div>
+        </div><div class="riv ca">3 người</div>
+      </div>
+      <div class="hl hlb"><div class="hlt">Base CRM lưu toàn bộ lịch sử tương tác KH — data không mất theo người nghỉ việc. Đây là ROI trực tiếp nhất của Base CRM với FTC.</div></div>
     </div>
   </div>
 </div>
 
-<!-- P3 DOANH THU -->
+<!-- ========== P3 DOANH THU ========== -->
 <div class="panel" id="p3">
   <div class="g4">
-    <div class="m"><div class="ma" style="background:var(--G)"></div>
-      <div class="ml">Doanh thu T4 <span class="src se">Ước tính từ CRM</span></div>
+    <div class="m" onclick="toggleExpand('dt1')">
+      <div class="ma" style="background:var(--G)"></div>
+      <div class="ml">Doanh thu T4 <span class="src sx">Excel/Sheet<div class="tip">Trưởng chi nhánh nhập doanh thu thực tế vào Google Sheet sau khi xuất hóa đơn. Sheet tự tổng hợp lên dashboard</div></span></div>
       <div class="mv cg">4.2 tỷ</div><div class="ms cg">↑ 18% so T3 · Đạt 62% mục tiêu</div>
-      <div class="mn">Chính xác hơn khi tích hợp Misa · Hiện là giá trị hợp đồng từ CRM</div>
+      <div class="mn">Nhấn để xem breakdown</div>
+      <div class="m-expand" id="dt1">
+        <div class="mex-row"><span class="mex-label">Forwarder</span><span class="cg">2.6 tỷ (62%)</span></div>
+        <div class="mex-row"><span class="mex-label">Kho ICD</span><span class="cb">1.0 tỷ (24%)</span></div>
+        <div class="mex-row"><span class="mex-label">Xây dựng</span><span class="c3">0.6 tỷ (14%)</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--B)"></div>
-      <div class="ml">Lợi nhuận gộp ước tính <span class="src se">Ước tính</span></div>
+    <div class="m" onclick="toggleExpand('dt2')">
+      <div class="ma" style="background:var(--B)"></div>
+      <div class="ml">Lợi nhuận gộp <span class="src sx">Excel/Sheet<div class="tip">= Doanh thu - Chi phí trực tiếp (cước hãng tàu, chi phí kho, nhân công trực tiếp). FTC nhập chi phí vào Sheet cùng cột với doanh thu</div></span></div>
       <div class="mv cb">630tr</div><div class="ms cg">Biên ~15% · T3 là 12%</div>
-      <div class="mn">= Doanh thu - Chi phí trực tiếp từ CRM · Chưa trừ overhead · Tích hợp Misa để chính xác</div>
+      <div class="mn">Nhấn để xem biên LN theo mảng</div>
+      <div class="m-expand" id="dt2">
+        <div class="mex-row"><span class="mex-label">Forwarder</span><span class="cg">18%</span></div>
+        <div class="mex-row"><span class="mex-label">Kho ICD</span><span class="cg">16%</span></div>
+        <div class="mex-row"><span class="mex-label">Xây dựng</span><span class="cb">11%</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--A)"></div>
-      <div class="ml">Tỷ lệ chuyển đổi RFQ <span class="src sa">Base CRM tự động</span></div>
-      <div class="mv ca">38%</div><div class="ms cg">↑ 8% so baseline</div>
-      <div class="mn">Base CRM tính từ số RFQ tạo và số booking được xác nhận · Tự động 100%</div>
+    <div class="m" onclick="toggleExpand('dt3')">
+      <div class="ma" style="background:var(--A)"></div>
+      <div class="ml">Tỷ lệ chuyển đổi RFQ <span class="src sa">Base CRM<div class="tip">Base CRM tính tự động từ timestamp tạo RFQ đến timestamp xác nhận booking</div></span></div>
+      <div class="mv ca">38%</div><div class="ms cg">↑ 8% so baseline trước Base</div>
+      <div class="mn">Nhấn để xem theo tuyến</div>
+      <div class="m-expand" id="dt3">
+        <div class="mex-row"><span class="mex-label">VN → Hàn Quốc</span><span class="cg">52%</span></div>
+        <div class="mex-row"><span class="mex-label">VN → Nhật Bản</span><span class="cg">44%</span></div>
+        <div class="mex-row"><span class="mex-label">VN → EU</span><span class="cb">35%</span></div>
+        <div class="mex-row"><span class="mex-label">VN → Bắc Mỹ</span><span class="ca">22%</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--GM)"></div>
-      <div class="ml">Khách hàng có đơn T4 <span class="src sa">Base CRM tự động</span></div>
-      <div class="mv cg">67</div><div class="ms ca">12 KH lặp lại · 55 KH mới phát sinh</div>
-      <div class="mn">Base CRM phân loại tự động theo lịch sử đặt hàng · Không cần tổng hợp</div>
+    <div class="m" onclick="toggleExpand('dt4')">
+      <div class="ma" style="background:var(--GM)"></div>
+      <div class="ml">Khách hàng có đơn T4 <span class="src sa">Base CRM<div class="tip">Base CRM phân loại tự động: KH lặp lại vs KH mới dựa vào lịch sử đặt hàng trong hệ thống</div></span></div>
+      <div class="mv cg">67</div><div class="ms ca">12 KH lặp lại · 55 KH mới</div>
+      <div class="mn">Nhấn để xem theo loại</div>
+      <div class="m-expand" id="dt4">
+        <div class="mex-row"><span class="mex-label">FDI Hàn Quốc</span><span class="cg">28 KH</span></div>
+        <div class="mex-row"><span class="mex-label">FDI Nhật/EU</span><span class="cb">18 KH</span></div>
+        <div class="mex-row"><span class="mex-label">Nội địa</span><span class="ca">21 KH</span></div>
+      </div>
     </div>
   </div>
+
   <div class="g21">
     <div class="card">
-      <div class="ch"><div class="ct">Doanh thu & Lợi nhuận 6 tháng <span class="src se">Ước tính — tích hợp Misa để chính xác</span></div></div>
-      <div class="cw" style="height:210px"><canvas id="c-pnl"></canvas></div>
+      <div class="ch"><div class="ct">Doanh thu & Lợi nhuận 6 tháng <span class="src sx">Excel/Sheet<div class="tip">FTC duy trì 1 Google Sheet master: doanh thu + chi phí trực tiếp → tự tính LN gộp và biên LN</div></span></div></div>
+      <div class="cw" style="height:205px"><canvas id="c-pnl"></canvas></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Hiệu suất Sales T4 <span class="src sa">Base CRM tự động</span></div></div>
+      <div class="ch"><div class="ct">Hiệu suất Sales T4 <span class="src sa">Base CRM<div class="tip">Base CRM tự tính: số RFQ nhận, số booking chốt, tỷ lệ chuyển đổi và thời gian phản hồi TB cho từng Sales</div></span></div></div>
       <div class="pr"><div class="pn">Nguyễn Minh</div><div class="pb"><div class="pf" style="width:88%;background:var(--G)"></div></div><div class="pv cg">88%</div></div>
       <div class="pr"><div class="pn">Trần Hoa</div><div class="pb"><div class="pf" style="width:72%;background:var(--G)"></div></div><div class="pv cg">72%</div></div>
       <div class="pr"><div class="pn">Lê Cường</div><div class="pb"><div class="pf" style="width:61%;background:var(--B)"></div></div><div class="pv cb">61%</div></div>
       <div class="pr"><div class="pn">Phạm Duy</div><div class="pb"><div class="pf" style="width:44%;background:var(--A)"></div></div><div class="pv ca">44%</div></div>
       <div class="pr"><div class="pn">Đỗ Trang</div><div class="pb"><div class="pf" style="width:31%;background:var(--R)"></div></div><div class="pv cr">31%</div></div>
-      <div style="border-top:1px solid var(--bdr);margin-top:12px;padding-top:12px">
-        <div class="sl">Pipeline báo giá tháng này <span class="src sa" style="margin-left:4px">Base CRM</span></div>
-        <div class="fr"><div class="fl">Tiếp nhận RFQ</div><div class="fbg"><div class="ff" style="width:100%;background:rgba(21,101,192,.45);color:var(--B)">94 lô</div></div><div class="fn">94</div></div>
-        <div class="fr"><div class="fl">Đã báo giá</div><div class="fbg"><div class="ff" style="width:52%;background:rgba(26,122,60,.45);color:var(--G)">49 lô</div></div><div class="fn">49</div></div>
+      <div style="border-top:1px solid var(--bdr);margin-top:11px;padding-top:11px">
+        <div class="sl">Pipeline báo giá T4 <span class="src sa" style="margin-left:4px">Base CRM</span></div>
+        <div class="fr"><div class="fl">Tiếp nhận RFQ</div><div class="fbg"><div class="ff" style="width:100%;background:rgba(21,101,192,.4);color:var(--B)">94 lô</div></div><div class="fn">94</div></div>
+        <div class="fr"><div class="fl">Đã báo giá</div><div class="fbg"><div class="ff" style="width:52%;background:rgba(26,122,60,.4);color:var(--G)">49 lô</div></div><div class="fn">49</div></div>
         <div class="fr"><div class="fl">Chốt booking</div><div class="fbg"><div class="ff" style="width:38%;background:rgba(45,158,85,.55);color:var(--G)">36 lô</div></div><div class="fn">36</div></div>
-        <div class="fr"><div class="fl">Thua (mất đơn)</div><div class="fbg"><div class="ff" style="width:14%;background:rgba(211,47,47,.45);color:var(--R)">13 lô</div></div><div class="fn">13</div></div>
+        <div class="fr"><div class="fl">Thua / mất đơn</div><div class="fbg"><div class="ff" style="width:14%;background:rgba(198,40,40,.45);color:var(--R)">13 lô</div></div><div class="fn">13</div></div>
       </div>
       <div class="hl hlr"><div class="hlt">9/13 đơn thua do phản hồi báo giá chậm hơn đối thủ — đây là doanh thu trực tiếp đang mất mỗi tháng.</div></div>
     </div>
   </div>
+
   <div class="g2">
     <div class="card">
-      <div class="ch"><div class="ct">Top 10 khách hàng T4 <span class="src sa">Base CRM tự động</span></div></div>
+      <div class="ch"><div class="ct">Top KH theo doanh thu T4 <span class="src sa">Base CRM<div class="tip">Base CRM tổng hợp từ lịch sử đơn hàng và giá trị hợp đồng. Nhấn từng dòng để xem lịch sử đơn hàng</div></span></div></div>
       <table class="tbl">
-        <tr><th>Khách hàng</th><th>Loại</th><th>Doanh thu</th><th>Trend</th><th>Trạng thái</th></tr>
-        <tr><td>Samsung SDI Vietnam</td><td>FDI Hàn</td><td class="mono cb">756tr</td><td class="cg">↑ 12%</td><td><span class="b bg2">Ổn định</span></td></tr>
-        <tr><td>Lotte Chemical VN</td><td>FDI Hàn</td><td class="mono cb">547tr</td><td class="cg">↑ 8%</td><td><span class="b bg2">Vừa ký Q2</span></td></tr>
-        <tr><td>Hyundai MM</td><td>FDI Hàn</td><td class="mono cb">420tr</td><td class="cr">↓ 45 ngày im lặng</td><td><span class="b br">Nguy cơ</span></td></tr>
-        <tr><td>LG Innotek</td><td>FDI Hàn</td><td class="mono cb">336tr</td><td class="cg">↑ 5%</td><td><span class="b bg2">Ổn định</span></td></tr>
-        <tr><td>Posco Vietnam</td><td>FDI Hàn</td><td class="mono cb">252tr</td><td>→ Ổn định</td><td><span class="b bb">Theo dõi</span></td></tr>
-        <tr><td>Vinfast Export</td><td>Nội địa</td><td class="mono cb">210tr</td><td class="cg">↑ 34% — mới</td><td><span class="b bb">Tiềm năng</span></td></tr>
-        <tr><td>Nestle Vietnam</td><td>FDI EU</td><td class="mono cb">147tr</td><td class="cg">↑ 9%</td><td><span class="b bg2">Ổn định</span></td></tr>
-        <tr><td>Panasonic VN</td><td>FDI Nhật</td><td class="mono cb">126tr</td><td class="cr">↓ 18%</td><td><span class="b ba">Cần chăm sóc</span></td></tr>
-        <tr><td>Tôn Hoa Sen</td><td>Nội địa</td><td class="mono cb">105tr</td><td class="cg">↑ 22%</td><td><span class="b bb">Đang tăng</span></td></tr>
+        <tr><th></th><th>Khách hàng</th><th>Loại</th><th>Doanh thu T4</th><th>Trend</th><th>Trạng thái</th></tr>
+        <tr class="expandable" onclick="toggleRow('kh1')"><td></td><td>Samsung SDI Vietnam</td><td>FDI Hàn</td><td class="mono cb">756tr</td><td class="cg">↑ 12%</td><td><span class="b bg2">Ổn định</span></td></tr>
+        <tr class="sub-row" id="kh1"><td colspan="6">12 lô T4 · Tuyến chính: HP → Busan, HP → Seoul · Sales: Nguyễn Minh · Hợp đồng năm 2026 trị giá 3.8 tỷ</td></tr>
+        <tr class="expandable" onclick="toggleRow('kh2')"><td></td><td>Lotte Chemical VN</td><td>FDI Hàn</td><td class="mono cb">547tr</td><td class="cg">↑ 8%</td><td><span class="b bg2">Vừa ký Q2</span></td></tr>
+        <tr class="sub-row" id="kh2"><td colspan="6">Hợp đồng Q2 vừa ký 01/04 · 12 lô/tháng · Tuyến HP → Busan và HP → Tokyo · Sales: Trần Hoa</td></tr>
+        <tr class="expandable" onclick="toggleRow('kh3')"><td></td><td>Hyundai MM</td><td>FDI Hàn</td><td class="mono cb">420tr</td><td class="cr">↓ Im lặng 45 ngày</td><td><span class="b br">Nguy cơ</span></td></tr>
+        <tr class="sub-row" id="kh3"><td colspan="6">Lần cuối đặt hàng: 15/02/2026 · TB 2 đơn/tháng · Sales Nguyễn Minh phụ trách · CRM đã cảnh báo sau 30 ngày không có đơn · Cần gọi điện hôm nay</td></tr>
+        <tr class="expandable" onclick="toggleRow('kh4')"><td></td><td>LG Innotek</td><td>FDI Hàn</td><td class="mono cb">336tr</td><td class="cg">↑ 5%</td><td><span class="b bg2">Ổn định</span></td></tr>
+        <tr class="sub-row" id="kh4"><td colspan="6">8 lô T4 · Tuyến chính: HN → Osaka, HN → Tokyo · Thanh toán đúng hạn 100% · Khách tiềm năng mở rộng sang tuyến EU</td></tr>
+        <tr class="expandable" onclick="toggleRow('kh5')"><td></td><td>Panasonic VN</td><td>FDI Nhật</td><td class="mono cb">126tr</td><td class="cr">↓ 18%</td><td><span class="b ba">Cần chăm sóc</span></td></tr>
+        <tr class="sub-row" id="kh5"><td colspan="6">Giảm từ 154tr T3 xuống 126tr T4 · Nguyên nhân: Panasonic đang thử nghiệm với đơn vị khác · Sales Lê Cường cần gặp trực tiếp tuần tới</td></tr>
       </table>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Doanh thu & Biên LN theo tuyến <span class="src sa">Base CRM tự động</span></div></div>
+      <div class="ch"><div class="ct">Doanh thu & Biên LN theo tuyến <span class="src sx">Excel/Sheet<div class="tip">FTC phân loại doanh thu theo tuyến trong Sheet. Biên LN = DT - chi phí cước hãng tàu nhập từ Sheet chi phí</div></span></div></div>
       <div class="sl">Tỷ trọng doanh thu</div>
-      <div class="br2"><div class="bl2">VN → Hàn Quốc</div><div class="bb2"><div class="bf" style="width:100%;background:var(--B)"></div></div><div class="bv cb">38%</div></div>
-      <div class="br2"><div class="bl2">VN → Nhật Bản</div><div class="bb2"><div class="bf" style="width:60%;background:var(--G)"></div></div><div class="bv cg">23%</div></div>
-      <div class="br2"><div class="bl2">VN → EU</div><div class="bb2"><div class="bf" style="width:42%;background:var(--GM)"></div></div><div class="bv cg">16%</div></div>
-      <div class="br2"><div class="bl2">Nội địa B-N</div><div class="bb2"><div class="bf" style="width:34%;background:var(--A)"></div></div><div class="bv ca">13%</div></div>
-      <div class="br2"><div class="bl2">VN → Bắc Mỹ</div><div class="bb2"><div class="bf" style="width:21%;background:var(--t4)"></div></div><div class="bv c3">8%</div></div>
+      <div class="br2"><div class="bl2">VN → Hàn Quốc</div><div class="bb2"><div class="bf" style="width:100%;background:var(--B)"></div></div><div class="bv2 cb">38%</div></div>
+      <div class="br2"><div class="bl2">VN → Nhật Bản</div><div class="bb2"><div class="bf" style="width:60%;background:var(--G)"></div></div><div class="bv2 cg">23%</div></div>
+      <div class="br2"><div class="bl2">VN → EU</div><div class="bb2"><div class="bf" style="width:42%;background:var(--GM)"></div></div><div class="bv2 cg">16%</div></div>
+      <div class="br2"><div class="bl2">Nội địa B-N</div><div class="bb2"><div class="bf" style="width:34%;background:var(--A)"></div></div><div class="bv2 ca">13%</div></div>
+      <div class="br2"><div class="bl2">VN → Bắc Mỹ</div><div class="bb2"><div class="bf" style="width:21%;background:var(--t4)"></div></div><div class="bv2 c3">8%</div></div>
       <div style="border-top:1px solid var(--bdr);margin-top:12px;padding-top:12px">
-        <div class="sl">Biên lợi nhuận ước tính theo tuyến <span class="src se" style="margin-left:4px">Ước tính</span></div>
-        <div class="br2"><div class="bl2">VN → Hàn</div><div class="bb2"><div class="bf" style="width:100%;background:var(--G)"></div></div><div class="bv cg">18%</div></div>
-        <div class="br2"><div class="bl2">VN → EU</div><div class="bb2"><div class="bf" style="width:88%;background:var(--G)"></div></div><div class="bv cg">16%</div></div>
-        <div class="br2"><div class="bl2">VN → Nhật</div><div class="bb2"><div class="bf" style="width:72%;background:var(--B)"></div></div><div class="bv cb">13%</div></div>
-        <div class="br2"><div class="bl2">Nội địa B-N</div><div class="bb2"><div class="bf" style="width:44%;background:var(--A)"></div></div><div class="bv ca">8%</div></div>
-        <div class="br2"><div class="bl2">VN → Bắc Mỹ</div><div class="bb2"><div class="bf" style="width:22%;background:var(--R)"></div></div><div class="bv cr">4%</div></div>
+        <div class="sl">Biên lợi nhuận theo tuyến</div>
+        <div class="br2"><div class="bl2">VN → Hàn</div><div class="bb2"><div class="bf" style="width:100%;background:var(--G)"></div></div><div class="bv2 cg">18%</div></div>
+        <div class="br2"><div class="bl2">VN → EU</div><div class="bb2"><div class="bf" style="width:88%;background:var(--G)"></div></div><div class="bv2 cg">16%</div></div>
+        <div class="br2"><div class="bl2">VN → Nhật</div><div class="bb2"><div class="bf" style="width:72%;background:var(--B)"></div></div><div class="bv2 cb">13%</div></div>
+        <div class="br2"><div class="bl2">Nội địa B-N</div><div class="bb2"><div class="bf" style="width:44%;background:var(--A)"></div></div><div class="bv2 ca">8%</div></div>
+        <div class="br2"><div class="bl2">VN → Bắc Mỹ</div><div class="bb2"><div class="bf" style="width:22%;background:var(--R)"></div></div><div class="bv2 cr">4%</div></div>
       </div>
-      <div class="hl hla"><div class="hlt">Tuyến Bắc Mỹ: doanh thu 8% nhưng biên LN chỉ 4% — thấp nhất. Cần rà soát cơ cấu chi phí tuyến này.</div></div>
+      <div class="hl hla"><div class="hlt">Tuyến Bắc Mỹ: DT 8% nhưng biên LN chỉ 4% — thấp nhất. Cần rà soát chi phí cước hãng tàu tuyến này.</div></div>
     </div>
   </div>
 </div>
 
-<!-- P4 CHI PHÍ -->
+<!-- ========== P4 CHI PHÍ ========== -->
 <div class="panel" id="p4">
   <div class="g4">
-    <div class="m"><div class="ma" style="background:var(--R)"></div>
-      <div class="ml">Chi phí DEM/DET T3 <span class="src si">Base + nhập đơn giá hãng tàu</span></div>
+    <div class="m" onclick="toggleExpand('cp1')">
+      <div class="ma" style="background:var(--R)"></div>
+      <div class="ml">Chi phí DEM/DET T3 <span class="src si">Base + Sheet đơn giá<div class="tip">Base đếm ngày vượt free time. FTC nhập đơn giá DEM/DET theo hãng tàu vào Sheet → Base nhân tự động</div></span></div>
       <div class="mv cr">87tr</div><div class="ms cr">↑ 23% so T2 — xu hướng xấu dần</div>
-      <div class="mn">FTC nhập đơn giá DEM/DET theo hãng tàu → Base tính chi phí theo từng container</div>
+      <div class="mn">Nhấn để xem theo hãng tàu</div>
+      <div class="m-expand" id="cp1">
+        <div class="mex-row"><span class="mex-label">Evergreen</span><span class="cr">32tr</span></div>
+        <div class="mex-row"><span class="mex-label">MSC</span><span class="ca">28tr</span></div>
+        <div class="mex-row"><span class="mex-label">Hapag-Lloyd</span><span class="ca">18tr</span></div>
+        <div class="mex-row"><span class="mex-label">Các hãng khác</span><span class="c3">9tr</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--A)"></div>
-      <div class="ml">Chi phí OT nhân sự <span class="src sa">Base HRM tự động</span></div>
+    <div class="m" onclick="toggleExpand('cp2')">
+      <div class="ma" style="background:var(--A)"></div>
+      <div class="ml">Chi phí OT nhân sự <span class="src sa">Base HRM<div class="tip">Base HRM tính tự động từ timesheet thực tế. Chính xác tuyệt đối, không cần tổng hợp thủ công</div></span></div>
       <div class="mv ca">18.5tr</div><div class="ms ca">412h OT · HP chiếm 58%</div>
-      <div class="mn">Base HRM tính từ timesheet thực tế · Chính xác 100% · Không cần tổng hợp</div>
+      <div class="mn">Nhấn để xem theo chi nhánh</div>
+      <div class="m-expand" id="cp2">
+        <div class="mex-row"><span class="mex-label">Hải Phòng</span><span class="cr">10.7tr (241h)</span></div>
+        <div class="mex-row"><span class="mex-label">Hà Nội</span><span class="ca">4.7tr (142h)</span></div>
+        <div class="mex-row"><span class="mex-label">TP.HCM</span><span class="cb">3.0tr (29h)</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--A)"></div>
-      <div class="ml">Chi phí rework / sai sót <span class="src si">Base đếm + FTC nhập chi phí</span></div>
+    <div class="m" onclick="toggleExpand('cp3')">
+      <div class="ma" style="background:var(--A)"></div>
+      <div class="ml">Chi phí rework / sai sót <span class="src si">Base đếm + Sheet chi phí<div class="tip">Base Workflow đếm số lô bị làm lại bước. Chi phí thực tế (phạt HQ, phí xử lý lại) nhập vào Sheet chi phí</div></span></div>
       <div class="mv ca">12.3tr</div><div class="ms ca">14 lô phải làm lại hồ sơ T3</div>
-      <div class="mn">Base đếm số lô bị "làm lại bước" · Chi phí thực tế FTC nhập thủ công</div>
+      <div class="mn">Nhấn để xem theo nguyên nhân</div>
+      <div class="m-expand" id="cp3">
+        <div class="mex-row"><span class="mex-label">Sai thông tin hải quan</span><span class="cr">8 lô · 6.8tr</span></div>
+        <div class="mex-row"><span class="mex-label">Thiếu chứng từ</span><span class="ca">4 lô · 3.4tr</span></div>
+        <div class="mex-row"><span class="mex-label">Sai trọng lượng</span><span class="ca">2 lô · 2.1tr</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--B)"></div>
-      <div class="ml">Công suất kho ICD trung bình <span class="src si">Base Workflow + nhập tồn kho</span></div>
+    <div class="m" onclick="toggleExpand('cp4')">
+      <div class="ma" style="background:var(--B)"></div>
+      <div class="ml">Công suất kho ICD <span class="src sv">AppSheet<div class="tip">Nhân viên kho nhập tồn kho nhập/xuất vào AppSheet mỗi ngày → tự tính % công suất</div></span></div>
       <div class="mv cb">73%</div><div class="ms ca">HP: 87% · Việt Trì: 52%</div>
-      <div class="mn">FTC tạo quy trình nhập/xuất kho trên Base → tính tồn tự động về sau</div>
+      <div class="mn">Nhấn để xem từng kho</div>
+      <div class="m-expand" id="cp4">
+        <div class="mex-row"><span class="mex-label">Kho HP thường (45.000m²)</span><span class="cr">87%</span></div>
+        <div class="mex-row"><span class="mex-label">Kho HP ngoại quan (25.000m²)</span><span class="cg">78%</span></div>
+        <div class="mex-row"><span class="mex-label">Kho Vĩnh Phúc (20.000m²)</span><span class="cr">52%</span></div>
+        <div class="mex-row"><span class="mex-label">Kho Việt Trì HC (10.000m²)</span><span class="ca">65%</span></div>
+      </div>
     </div>
   </div>
+
   <div class="g21">
     <div class="card">
-      <div class="ch"><div class="ct">Chi phí vận hành theo tháng <span class="src si">Base + một phần nhập đầu vào · Từ tháng triển khai trở đi tự động</span></div></div>
-      <div class="cw" style="height:210px"><canvas id="c-cost"></canvas></div>
+      <div class="ch"><div class="ct">Chi phí vận hành theo tháng <span class="src si">Base HRM (OT) + Sheet (DEM/DET, rework)<div class="tip">OT: Base HRM tự động. DEM/DET và rework: FTC nhập vào Sheet sau khi phát sinh, tổng hợp lên đây</div></span></div></div>
+      <div class="cw" style="height:205px"><canvas id="c-cost"></canvas></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Phân tích chi phí ẩn T3 <span class="src si">Base + Misa · Hiện là ước tính</span></div></div>
-      <div class="br2"><div class="bl2">DEM/DET</div><div class="bb2"><div class="bf" style="width:100%;background:var(--R)"></div></div><div class="bv cr">87tr</div></div>
-      <div class="br2"><div class="bl2">Rework HQ</div><div class="bb2"><div class="bf" style="width:55%;background:var(--A)"></div></div><div class="bv ca">48tr</div></div>
-      <div class="br2"><div class="bl2">OT nhân sự</div><div class="bb2"><div class="bf" style="width:32%;background:var(--B)"></div></div><div class="bv cb">28tr</div></div>
-      <div class="br2"><div class="bl2">Hồ sơ sai</div><div class="bb2"><div class="bf" style="width:22%;background:var(--P)"></div></div><div class="bv cp">19tr</div></div>
-      <div class="br2"><div class="bl2">Phạt trễ</div><div class="bb2"><div class="bf" style="width:14%;background:var(--t4)"></div></div><div class="bv c3">12tr</div></div>
-      <div class="hl hlr"><div class="hlt">Tổng chi phí ẩn T3: <strong>~194 triệu</strong> — tương đương 30% lợi nhuận gộp. Đây là tiền tiết kiệm được với hệ thống đúng.</div></div>
-      <div style="border-top:1px solid var(--bdr);margin-top:12px;padding-top:12px">
-        <div class="sl">Chi phí OT theo chi nhánh <span class="src sa" style="margin-left:4px">Base HRM · Chính xác</span></div>
-        <div class="br2"><div class="bl2">Hải Phòng</div><div class="bb2"><div class="bf" style="width:100%;background:var(--R)"></div></div><div class="bv cr">10.7tr</div></div>
-        <div class="br2"><div class="bl2">Hà Nội</div><div class="bb2"><div class="bf" style="width:44%;background:var(--A)"></div></div><div class="bv ca">4.7tr</div></div>
-        <div class="br2"><div class="bl2">TP.HCM</div><div class="bb2"><div class="bf" style="width:28%;background:var(--B)"></div></div><div class="bv cb">3.0tr</div></div>
-      </div>
-    </div>
-  </div>
-  <div class="g2">
-    <div class="card">
-      <div class="ch"><div class="ct">Kho ICD — Công suất & Chi phí <span class="src si">Base Workflow + FTC nhập đầu vào tồn kho & chi phí/m²</span></div></div>
-      <div class="cw" style="height:140px"><canvas id="c-wh"></canvas></div>
-      <div style="margin-top:12px">
+      <div class="ch"><div class="ct">Chi phí ẩn T3 — phân tích <span class="src si">Base + Sheet<div class="tip">Base đếm số sự cố, Sheet ghi chi phí thực tế → dashboard tổng hợp</div></span></div></div>
+      <div class="br2"><div class="bl2">DEM/DET</div><div class="bb2"><div class="bf" style="width:100%;background:var(--R)"></div></div><div class="bv2 cr">87tr</div></div>
+      <div class="br2"><div class="bl2">Rework HQ</div><div class="bb2"><div class="bf" style="width:55%;background:var(--A)"></div></div><div class="bv2 ca">48tr</div></div>
+      <div class="br2"><div class="bl2">OT nhân sự</div><div class="bb2"><div class="bf" style="width:32%;background:var(--B)"></div></div><div class="bv2 cb">28tr</div></div>
+      <div class="br2"><div class="bl2">Hồ sơ sai</div><div class="bb2"><div class="bf" style="width:22%;background:var(--V)"></div></div><div class="bv2 cv">19tr</div></div>
+      <div class="br2"><div class="bl2">Phạt trễ</div><div class="bb2"><div class="bf" style="width:14%;background:var(--t4)"></div></div><div class="bv2 c3">12tr</div></div>
+      <div class="hl hlr"><div class="hlt">Tổng chi phí ẩn T3: <strong>~194 triệu</strong> = 30% lợi nhuận gộp. Đây là tiền tiết kiệm được khi có hệ thống Base.</div></div>
+      <div style="border-top:1px solid var(--bdr);margin-top:11px;padding-top:11px">
+        <div class="sl">Nguyên nhân phát sinh ngoài kế hoạch T3 <span class="src si" style="margin-left:4px">Base + Sheet</span></div>
         <table class="tbl">
-          <tr><th>Kho</th><th>Diện tích</th><th>Công suất</th><th>Chi phí/m²</th><th>Hiệu quả</th></tr>
-          <tr><td>Kho HP (thường)</td><td class="mono">45.000m²</td><td class="ca">87%</td><td class="mono">42k</td><td><span class="b bg2">Cao</span></td></tr>
-          <tr><td>Kho HP (ngoại quan)</td><td class="mono">25.000m²</td><td class="cg">78%</td><td class="mono">68k</td><td><span class="b bg2">Tốt</span></td></tr>
-          <tr><td>Kho Vĩnh Phúc</td><td class="mono">20.000m²</td><td class="cr">52%</td><td class="mono">38k</td><td><span class="b br">Kém</span></td></tr>
-          <tr><td>Kho Việt Trì (hóa chất)</td><td class="mono">10.000m²</td><td class="ca">65%</td><td class="mono">95k</td><td><span class="b ba">Trung bình</span></td></tr>
+          <tr><th></th><th>Nguyên nhân</th><th>Số lần</th><th>Chi phí</th><th>Bộ phận</th></tr>
+          <tr class="expandable" onclick="toggleRow('cpr1')"><td></td><td>Khai báo HQ sai thông tin</td><td>8</td><td class="mono cr">34tr</td><td>Ops HP</td></tr>
+          <tr class="sub-row" id="cpr1"><td colspan="5">Lỗi tái diễn: thiếu HS code, sai trọng lượng. Giải pháp: thêm validation bắt buộc trong form Base Workflow. Không cần tuyển thêm người, chỉ cần chuẩn hóa quy trình.</td></tr>
+          <tr class="expandable" onclick="toggleRow('cpr2')"><td></td><td>Container trả muộn</td><td>5</td><td class="mono cr">28tr</td><td>Ops HN</td></tr>
+          <tr class="sub-row" id="cpr2"><td colspan="5">Nguyên nhân: không có cảnh báo tự động ngày trả container. Base Workflow với tính năng reminder sẽ giải quyết hoàn toàn.</td></tr>
+          <tr class="expandable" onclick="toggleRow('cpr3')"><td></td><td>Sửa chữa phương tiện</td><td>3</td><td class="mono ca">18tr</td><td>Vận tải</td></tr>
+          <tr class="sub-row" id="cpr3"><td colspan="5">2 xe đầu kéo và 1 xe tải. Chi phí sửa chữa đột xuất do bảo dưỡng định kỳ bị bỏ qua. Cần tạo lịch bảo dưỡng trên Base Workflow.</td></tr>
         </table>
-        <div class="hl hla"><div class="hlt">Kho Vĩnh Phúc chỉ 52% công suất nhưng vẫn chạy full chi phí vận hành — lãng phí ~7.6 triệu/tháng. Cần chiến lược lấp đầy kho.</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="ch"><div class="ct">Chi phí phát sinh ngoài kế hoạch <span class="src si">Base Workflow đếm số lần · Chi phí thực FTC nhập từ Misa</span></div></div>
-      <div class="cw" style="height:150px"><canvas id="c-unp"></canvas></div>
-      <div style="margin-top:12px">
-        <table class="tbl">
-          <tr><th>Nguyên nhân</th><th>Số lần T3</th><th>Chi phí</th><th>Bộ phận</th></tr>
-          <tr><td>Khai báo HQ sai thông tin</td><td>8</td><td class="mono cr">34tr</td><td>Ops HP</td></tr>
-          <tr><td>Container trả muộn</td><td>5</td><td class="mono cr">28tr</td><td>Ops HN</td></tr>
-          <tr><td>Sửa chữa phương tiện</td><td>3</td><td class="mono ca">18tr</td><td>Vận tải</td></tr>
-          <tr><td>Hàng hóa hư hỏng</td><td>2</td><td class="mono ca">14tr</td><td>Kho HP</td></tr>
-        </table>
-        <div class="hl hla"><div class="hlt">Khai báo HQ sai 8 lần liên tiếp tại Ops HP — đây là vấn đề hệ thống, không phải lỗi cá nhân. Cần chuẩn hóa quy trình bằng Base Workflow: form bắt buộc điền đủ thông tin trước khi sang bước tiếp theo.</div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- P5 VẬN HÀNH -->
+<!-- ========== P5 VẬN HÀNH ========== -->
 <div class="panel" id="p5">
   <div class="g4">
-    <div class="m"><div class="ma" style="background:var(--G)"></div>
-      <div class="ml">Tỷ lệ đúng tiến độ <span class="src sa">Base Workflow tự động</span></div>
+    <div class="m" onclick="toggleExpand('vh1')">
+      <div class="ma" style="background:var(--G)"></div>
+      <div class="ml">Tỷ lệ đúng tiến độ <span class="src sa">Base Workflow<div class="tip">So sánh deadline cài trong Workflow vs ngày hoàn thành thực tế. Tự động 100%</div></span></div>
       <div class="mv cg">84%</div><div class="ms cr">↓ 3% so T3 · Mục tiêu: 90%</div>
-      <div class="mn">So deadline đã cài trong Workflow vs ngày hoàn thành thực tế · Tự động 100%</div>
+      <div class="mn">Nhấn để xem theo chi nhánh</div>
+      <div class="m-expand" id="vh1">
+        <div class="mex-row"><span class="mex-label">Hà Nội</span><span class="cg">92%</span></div>
+        <div class="mex-row"><span class="mex-label">Hải Phòng</span><span class="ca">81%</span></div>
+        <div class="mex-row"><span class="mex-label">TP.HCM</span><span class="cr">74%</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--B)"></div>
-      <div class="ml">Thời gian phản hồi báo giá <span class="src sa">Base CRM tự động</span></div>
-      <div class="mv cb">3.2h</div><div class="ms cg">↓ từ 6.5h (trước khi có hệ thống)</div>
-      <div class="mn">Base tính từ timestamp nhận RFQ → timestamp gửi báo giá · Chính xác</div>
+    <div class="m" onclick="toggleExpand('vh2')">
+      <div class="ma" style="background:var(--B)"></div>
+      <div class="ml">Thời gian phản hồi báo giá <span class="src sa">Base CRM<div class="tip">Timestamp nhận RFQ → timestamp gửi báo giá. Không cần nhập gì thêm</div></span></div>
+      <div class="mv cb">3.2h</div><div class="ms cg">↓ từ 6.5h trước Base</div>
+      <div class="mn">Nhấn để xem theo Sales</div>
+      <div class="m-expand" id="vh2">
+        <div class="mex-row"><span class="mex-label">Nguyễn Minh</span><span class="cg">1.8h</span></div>
+        <div class="mex-row"><span class="mex-label">Trần Hoa</span><span class="cg">2.4h</span></div>
+        <div class="mex-row"><span class="mex-label">Lê Cường</span><span class="cb">3.1h</span></div>
+        <div class="mex-row"><span class="mex-label">Phạm Duy</span><span class="ca">4.2h ⚠</span></div>
+        <div class="mex-row"><span class="mex-label">Đỗ Trang</span><span class="cr">5.8h ⚠</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--A)"></div>
-      <div class="ml">Tuân thủ quy trình <span class="src sa">Base Workflow tự động</span></div>
+    <div class="m" onclick="toggleExpand('vh3')">
+      <div class="ma" style="background:var(--A)"></div>
+      <div class="ml">Tuân thủ quy trình <span class="src sa">Base Workflow<div class="tip">% lô hàng cập nhật đầy đủ tất cả các bước. Base tự đếm và tính tỷ lệ</div></span></div>
       <div class="mv ca">91%</div><div class="ms cg">↑ 6% so tháng đầu triển khai</div>
-      <div class="mn">% lô hàng cập nhật đầy đủ tất cả các bước · Không bỏ bước</div>
+      <div class="mn">Nhấn để xem theo bộ phận</div>
+      <div class="m-expand" id="vh3">
+        <div class="mex-row"><span class="mex-label">Ops Hà Nội</span><span class="cg">96%</span></div>
+        <div class="mex-row"><span class="mex-label">Kho ICD</span><span class="cg">94%</span></div>
+        <div class="mex-row"><span class="mex-label">Sales</span><span class="cb">91%</span></div>
+        <div class="mex-row"><span class="mex-label">Ops Hải Phòng</span><span class="ca">83%</span></div>
+        <div class="mex-row"><span class="mex-label">Ops TP.HCM</span><span class="cr">76%</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--P)"></div>
-      <div class="ml">Tờ trình duyệt trung bình <span class="src sa">Base Request tự động</span></div>
-      <div class="mv cp">4.8h</div><div class="ms cr">8 tờ trình đang quá 24h chưa duyệt</div>
-      <div class="mn">Base Request ghi timestamp gửi → timestamp duyệt · Nhắc tự động mỗi 4h</div>
+    <div class="m" onclick="toggleExpand('vh4')">
+      <div class="ma" style="background:var(--V)"></div>
+      <div class="ml">Thời gian duyệt tờ trình <span class="src sa">Base Request<div class="tip">Timestamp gửi → timestamp duyệt. Base tự nhắc người duyệt mỗi 4h</div></span></div>
+      <div class="mv cv">4.8h</div><div class="ms cr">8 tờ trình đang quá 24h</div>
+      <div class="mn">Nhấn để xem theo cấp duyệt</div>
+      <div class="m-expand" id="vh4">
+        <div class="mex-row"><span class="mex-label">Trưởng phòng</span><span class="cg">2.1h ✓</span></div>
+        <div class="mex-row"><span class="mex-label">TGĐ</span><span class="ca">8.8h</span></div>
+        <div class="mex-row"><span class="mex-label">Phó TGĐ</span><span class="cr">11.4h ⚠</span></div>
+      </div>
     </div>
   </div>
+
   <div class="g12">
     <div class="card">
-      <div class="ch"><div class="ct">Workload Ops hiện tại <span class="src sa">Base Workflow tự động</span></div></div>
-      <div style="font-size:11px;color:var(--t3);margin-bottom:10px">Số lô hàng đang phụ trách · Ngưỡng an toàn: ≤12 lô/người</div>
+      <div class="ch"><div class="ct">Workload Ops hiện tại <span class="src sa">Base Workflow<div class="tip">Base Workflow tự đếm số lô hàng đang assigned cho từng nhân viên Ops</div></span></div></div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:10px">Số lô đang phụ trách · Ngưỡng an toàn: ≤12 lô/người</div>
       <div class="pr"><div class="pn">Nguyễn Bình</div><div class="pb"><div class="pf" style="width:100%;background:var(--R)"></div></div><div class="pv cr">18 ⚠</div></div>
       <div class="pr"><div class="pn">Trần Hoa</div><div class="pb"><div class="pf" style="width:89%;background:var(--A)"></div></div><div class="pv ca">16 ⚠</div></div>
       <div class="pr"><div class="pn">Lê Văn Nam</div><div class="pb"><div class="pf" style="width:78%;background:var(--A)"></div></div><div class="pv ca">14</div></div>
       <div class="pr"><div class="pn">Phạm Thu</div><div class="pb"><div class="pf" style="width:67%;background:var(--G)"></div></div><div class="pv cg">12</div></div>
       <div class="pr"><div class="pn">Đỗ Hùng</div><div class="pb"><div class="pf" style="width:55%;background:var(--G)"></div></div><div class="pv cg">10</div></div>
       <div class="pr"><div class="pn">Minh (nghỉ phép)</div><div class="pb"><div class="pf" style="width:0%;background:var(--t4)"></div></div><div class="pv c3">0</div></div>
-      <div class="hl hlr"><div class="hlt">Bình đang gánh 18 lô — vượt ngưỡng 50%. Khi Minh nghỉ, 12 lô của Minh dồn lên người còn lại. Cần phân công lại ngay hôm nay.</div></div>
+      <div class="hl hlr"><div class="hlt">Bình đang gánh 18 lô — vượt ngưỡng 50%. Khi Minh nghỉ, 12 lô dồn sang người còn lại. Cần phân công lại ngay.</div></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Trạng thái & Thời gian quy trình lô hàng <span class="src sa">Base Workflow tự động từ timestamp</span></div></div>
+      <div class="ch"><div class="ct">Funnel lô hàng & Thời gian từng bước <span class="src sa">Base Workflow tự động<div class="tip">Base tính từ timestamp các bước → không cần nhập gì thêm. Click từng dòng để xem chi tiết</div></span></div></div>
       <div class="fr"><div class="fl">Booking xác nhận</div><div class="fbg"><div class="ff" style="width:100%;background:rgba(21,101,192,.4);color:var(--B)">38 lô</div></div><div class="fn">38</div></div>
       <div class="fr"><div class="fl">Khai báo hải quan</div><div class="fbg"><div class="ff" style="width:71%;background:rgba(26,122,60,.4);color:var(--G)">27 lô</div></div><div class="fn">27</div></div>
       <div class="fr"><div class="fl">Thông quan</div><div class="fbg"><div class="ff" style="width:60%;background:rgba(45,158,85,.4);color:var(--G)">23 lô</div></div><div class="fn">23</div></div>
       <div class="fr"><div class="fl">Làm hàng tại cảng</div><div class="fbg"><div class="ff" style="width:50%;background:rgba(230,81,0,.35);color:var(--A)">19 lô</div></div><div class="fn">19</div></div>
-      <div class="fr"><div class="fl">Điều độ xe</div><div class="fbg"><div class="ff" style="width:40%;background:rgba(106,27,154,.3);color:var(--P)">15 lô</div></div><div class="fn">15</div></div>
+      <div class="fr"><div class="fl">Điều độ xe</div><div class="fbg"><div class="ff" style="width:40%;background:rgba(106,27,154,.3);color:var(--V)">15 lô</div></div><div class="fn">15</div></div>
       <div class="fr"><div class="fl">Đang vận chuyển</div><div class="fbg"><div class="ff" style="width:29%;background:rgba(21,101,192,.3);color:var(--B)">11 lô</div></div><div class="fn">11</div></div>
       <div class="fr"><div class="fl">Hoàn thiện chứng từ</div><div class="fbg"><div class="ff" style="width:13%;background:rgba(120,144,156,.35);color:var(--t3)">5 lô</div></div><div class="fn">5</div></div>
-      <div style="border-top:1px solid var(--bdr);margin-top:12px;padding-top:12px">
-        <div class="sl">Thời gian TB từng bước (giờ) <span class="src sa" style="margin-left:4px">Base tự tính từ timestamp · Không cần nhập</span></div>
-        <div class="br2"><div class="bl2" style="width:130px">Booking → Khai báo</div><div class="bb2"><div class="bf" style="width:55%;background:var(--G)"></div></div><div class="bv cg">8.2h ✓</div></div>
-        <div class="br2"><div class="bl2" style="width:130px">Khai báo → Thông quan</div><div class="bb2"><div class="bf" style="width:100%;background:var(--R)"></div></div><div class="bv cr">38.4h ⚠</div></div>
-        <div class="br2"><div class="bl2" style="width:130px">Thông quan → Giao hàng</div><div class="bb2"><div class="bf" style="width:72%;background:var(--A)"></div></div><div class="bv ca">27.1h</div></div>
+      <div style="border-top:1px solid var(--bdr);margin-top:11px;padding-top:11px">
+        <div class="sl">Thời gian TB từng bước <span class="src sa" style="margin-left:4px">Base tính từ timestamp</span></div>
+        <div class="br2"><div class="bl2" style="width:130px">Booking → Khai báo</div><div class="bb2"><div class="bf" style="width:55%;background:var(--G)"></div></div><div class="bv2 cg">8.2h ✓</div></div>
+        <div class="br2"><div class="bl2" style="width:130px">Khai báo → Thông quan</div><div class="bb2"><div class="bf" style="width:100%;background:var(--R)"></div></div><div class="bv2 cr">38.4h ⚠</div></div>
+        <div class="br2"><div class="bl2" style="width:130px">Thông quan → Giao hàng</div><div class="bb2"><div class="bf" style="width:72%;background:var(--A)"></div></div><div class="bv2 ca">27.1h</div></div>
       </div>
-      <div class="hl hla"><div class="hlt">Bước "Khai báo → Thông quan" mất 38.4h — gấp đôi chuẩn ngành 18h. Đây là nút thắt cổ chai lớn nhất của FTC. Base Workflow hiển thị rõ ràng từng bước ai đang làm, mất bao lâu.</div></div>
+      <div class="hl hla"><div class="hlt">Bước "Khai báo → Thông quan" mất 38.4h — gấp đôi chuẩn ngành 18h. Đây là nút thắt cổ chai lớn nhất của FTC hiện tại.</div></div>
     </div>
   </div>
+
   <div class="g2">
     <div class="card">
-      <div class="ch"><div class="ct">Kỷ luật vận hành theo chi nhánh <span class="src sa">Base Workflow tự động</span></div></div>
-      <div class="cw" style="height:180px"><canvas id="c-radar"></canvas></div>
+      <div class="ch"><div class="ct">Kỷ luật vận hành theo chi nhánh <span class="src sa">Base Workflow<div class="tip">% cập nhật đúng bước, đúng hạn. Base tự tính — không cần báo cáo thủ công</div></span></div></div>
+      <div class="cw" style="height:178px"><canvas id="c-radar"></canvas></div>
     </div>
     <div class="card">
-      <div class="ch"><div class="ct">Tờ trình & Phê duyệt đang chờ <span class="src sa">Base Request tự động · Nhắc nhở mỗi 4h</span></div></div>
+      <div class="ch"><div class="ct">Tờ trình & Phê duyệt đang chờ <span class="src sa">Base Request<div class="tip">Base Request tự động nhắc người duyệt mỗi 4h. Với Zalo/Email hiện tại không có tính năng này</div></span></div></div>
       <table class="tbl">
-        <tr><th>Loại tờ trình</th><th>Người gửi</th><th>Chờ từ</th><th>SLA</th><th>Trạng thái</th></tr>
-        <tr><td>Tạm ứng chi phí cảng</td><td>Bình (HP)</td><td class="mono">36h</td><td class="mono">24h</td><td><span class="b br">Trễ</span></td></tr>
-        <tr><td>Đề xuất giữ giá cước</td><td>Minh (Sales)</td><td class="mono">28h</td><td class="mono">24h</td><td><span class="b br">Trễ</span></td></tr>
-        <tr><td>Phê duyệt hợp đồng thuê kho</td><td>Nam (HCM)</td><td class="mono">22h</td><td class="mono">24h</td><td><span class="b ba">Sắp trễ</span></td></tr>
-        <tr><td>Đề xuất mua sắm thiết bị</td><td>Hoa (Kho)</td><td class="mono">18h</td><td class="mono">48h</td><td><span class="b bb">Đúng hạn</span></td></tr>
-        <tr><td>Tạm ứng công tác phí</td><td>Lan (HN)</td><td class="mono">8h</td><td class="mono">24h</td><td><span class="b bg2">Mới</span></td></tr>
+        <tr><th></th><th>Loại tờ trình</th><th>Người gửi</th><th>Chờ từ</th><th>SLA</th><th>Trạng thái</th></tr>
+        <tr class="expandable" onclick="toggleRow('ap1')"><td></td><td>Tạm ứng chi phí cảng</td><td>Bình (HP)</td><td class="mono">36h</td><td class="mono">24h</td><td><span class="b br">Trễ</span></td></tr>
+        <tr class="sub-row" id="ap1"><td colspan="6">Tạm ứng 45 triệu để thanh toán phí bốc dỡ cảng HP lô FTC-089. Đang chờ Phó TGĐ duyệt. Base đã nhắc 3 lần. Nếu không duyệt trước 12:00 hôm nay, lô hàng sẽ không kịp xuất.</td></tr>
+        <tr class="expandable" onclick="toggleRow('ap2')"><td></td><td>Đề xuất giữ giá cước</td><td>Minh (Sales)</td><td class="mono">28h</td><td class="mono">24h</td><td><span class="b br">Trễ</span></td></tr>
+        <tr class="sub-row" id="ap2"><td colspan="6">Đề xuất giữ giá cước tuyến HP → Seoul cho Samsung SDI thêm 3 tháng. Khách đang chờ phản hồi. Trễ trả lời có thể ảnh hưởng đến hợp đồng Q3.</td></tr>
+        <tr class="expandable" onclick="toggleRow('ap3')"><td></td><td>Phê duyệt hợp đồng thuê kho</td><td>Nam (HCM)</td><td class="mono">22h</td><td class="mono">24h</td><td><span class="b ba">Sắp trễ</span></td></tr>
+        <tr class="sub-row" id="ap3"><td colspan="6">Hợp đồng thuê thêm 500m² kho tạm tại TP.HCM cho Vinfast Export. Giá: 8.5 triệu/tháng. Cần ký trước 02/04 để có kho từ 05/04.</td></tr>
+        <tr class="expandable" onclick="toggleRow('ap4')"><td></td><td>Đề xuất mua sắm thiết bị</td><td>Hoa (Kho)</td><td class="mono">18h</td><td class="mono">48h</td><td><span class="b bb">Đúng hạn</span></td></tr>
+        <tr class="sub-row" id="ap4"><td colspan="6">Mua 2 xe nâng điện cho kho HP. Tổng trị giá: 340 triệu. 3 báo giá đã đính kèm. Đây là trang thiết bị cần để xử lý lượng hàng tăng Q2.</td></tr>
       </table>
-      <div class="hl hlb"><div class="hlt">Với Zalo/Email hiện tại, không ai biết tờ trình đang chờ ai và chờ bao lâu. Base Request tự động nhắc người duyệt — không cần nhớ, không cần nhắn tin.</div></div>
-      <div style="border-top:1px solid var(--bdr);margin-top:12px;padding-top:12px">
-        <div class="sl">Thời gian duyệt TB theo cấp <span class="src sa" style="margin-left:4px">Base Request · Tự động</span></div>
-        <div class="br2"><div class="bl2">Trưởng phòng</div><div class="bb2"><div class="bf" style="width:55%;background:var(--G)"></div></div><div class="bv cg">2.1h</div></div>
-        <div class="br2"><div class="bl2">Phó TGĐ</div><div class="bb2"><div class="bf" style="width:100%;background:var(--R)"></div></div><div class="bv cr">11.4h</div></div>
-        <div class="br2"><div class="bl2">TGĐ</div><div class="bb2"><div class="bf" style="width:78%;background:var(--A)"></div></div><div class="bv ca">8.8h</div></div>
-      </div>
+      <div class="hl hlb"><div class="hlt">Base Request tự nhắc người duyệt mỗi 4h — không cần Sales/Ops gọi điện hỏi. Thời gian duyệt Phó TGĐ đang là 11.4h — cần giảm xuống &lt;4h.</div></div>
     </div>
   </div>
 </div>
 
-<!-- P6 NHÂN SỰ -->
+<!-- ========== P6 NHÂN SỰ ========== -->
 <div class="panel" id="p6">
   <div class="g4">
-    <div class="m"><div class="ma" style="background:var(--G)"></div>
-      <div class="ml">Tổng nhân sự <span class="src sa">Base HRM tự động</span></div>
+    <div class="m" onclick="toggleExpand('ns1')">
+      <div class="ma" style="background:var(--G)"></div>
+      <div class="ml">Tổng nhân sự <span class="src sa">Base HRM<div class="tip">Base HRM quản lý hồ sơ nhân sự tất cả chi nhánh. Tự cập nhật khi onboard/offboard</div></span></div>
       <div class="mv cg">107</div><div class="ms ca">Đang tuyển thêm 10 vị trí</div>
-      <div class="mn">Base HRM quản lý hồ sơ nhân sự tất cả chi nhánh · Tự động cập nhật</div>
+      <div class="mn">Nhấn để xem theo chi nhánh</div>
+      <div class="m-expand" id="ns1">
+        <div class="mex-row"><span class="mex-label">Hà Nội</span><span class="cg">42 người</span></div>
+        <div class="mex-row"><span class="mex-label">Hải Phòng</span><span class="cb">30 người</span></div>
+        <div class="mex-row"><span class="mex-label">TP.HCM</span><span class="cb">20 người</span></div>
+        <div class="mex-row"><span class="mex-label">Việt Trì + Vĩnh Phúc</span><span class="c3">15 người</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--R)"></div>
-      <div class="ml">Chưa chấm công hôm nay <span class="src sa">Base HRM GPS</span></div>
+    <div class="m" onclick="toggleExpand('ns2')">
+      <div class="ma" style="background:var(--R)"></div>
+      <div class="ml">Chưa chấm công hôm nay <span class="src sa">Base HRM GPS<div class="tip">Check-in GPS theo vị trí thực tế. Nhắc tự động sau 30 phút vắng mặt. Phù hợp tài xế, nhân viên kho, cảng</div></span></div>
       <div class="mv cr">5</div><div class="ms cr">2 HN · 2 HP · 1 HCM</div>
-      <div class="mn">Check-in GPS theo vị trí · Base nhắc tự động sau 30 phút vắng mặt</div>
+      <div class="mn">Nhấn để xem danh sách</div>
+      <div class="m-expand" id="ns2">
+        <div class="mex-row"><span class="mex-label">Nguyễn T. Bình (Ops HN)</span><span class="cr">4 lô đang xử lý</span></div>
+        <div class="mex-row"><span class="mex-label">Lê Văn Hoàng (Kho HN)</span><span class="ca">Kiểm kê tồn kho</span></div>
+        <div class="mex-row"><span class="mex-label">Trần Minh (Tài xế HP)</span><span class="cr">3 chuyến sáng nay</span></div>
+        <div class="mex-row"><span class="mex-label">Phạm Lan (CS HP)</span><span class="ca">6 lô theo dõi</span></div>
+        <div class="mex-row"><span class="mex-label">Đỗ Quang (Sale HCM)</span><span class="ca">2 RFQ chờ phản hồi</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--A)"></div>
-      <div class="ml">Nghỉ phép chờ duyệt <span class="src sa">Base HRM tự động</span></div>
+    <div class="m" onclick="toggleExpand('ns3')">
+      <div class="ma" style="background:var(--A)"></div>
+      <div class="ml">Nghỉ phép chờ duyệt <span class="src sa">Base HRM<div class="tip">Base HRM gửi nhắc người duyệt tự động. Tích hợp với lịch phân công Workflow để kiểm tra xung đột</div></span></div>
       <div class="mv ca">8</div><div class="ms ca">3 đơn quá 24h chưa xử lý</div>
-      <div class="mn">Base HRM gửi nhắc nhở người duyệt tự động · Tích hợp lịch phân công</div>
+      <div class="mn">Nhấn để xem theo bộ phận</div>
+      <div class="m-expand" id="ns3">
+        <div class="mex-row"><span class="mex-label">Ops HP</span><span class="cr">3 đơn (xung đột lô hàng)</span></div>
+        <div class="mex-row"><span class="mex-label">Sales HN</span><span class="ca">2 đơn</span></div>
+        <div class="mex-row"><span class="mex-label">Kho ICD</span><span class="cb">2 đơn</span></div>
+        <div class="mex-row"><span class="mex-label">Hành chính</span><span class="cg">1 đơn</span></div>
+      </div>
     </div>
-    <div class="m"><div class="ma" style="background:var(--B)"></div>
-      <div class="ml">OT tháng này (tích lũy) <span class="src sa">Base HRM tự động</span></div>
+    <div class="m" onclick="toggleExpand('ns4')">
+      <div class="ma" style="background:var(--B)"></div>
+      <div class="ml">OT tháng này <span class="src sa">Base HRM<div class="tip">Tính từ timesheet thực tế. Chính xác 100%, không cần ai tổng hợp cuối tháng</div></span></div>
       <div class="mv cb">412h</div><div class="ms cr">Chi phí: ~18.5 triệu</div>
-      <div class="mn">Base HRM tính từ timesheet thực tế · Chính xác · Không cần tổng hợp thủ công</div>
+      <div class="mn">Nhấn để xem theo chi nhánh</div>
+      <div class="m-expand" id="ns4">
+        <div class="mex-row"><span class="mex-label">Hải Phòng</span><span class="cr">241h — 58% tổng OT</span></div>
+        <div class="mex-row"><span class="mex-label">Hà Nội</span><span class="ca">142h</span></div>
+        <div class="mex-row"><span class="mex-label">TP.HCM</span><span class="cb">29h</span></div>
+      </div>
     </div>
   </div>
+
   <div class="g21">
     <div class="card">
-      <div class="ch"><div class="ct">Nhân sự theo chi nhánh & trạng thái hôm nay <span class="src sa">Base HRM tự động</span></div></div>
+      <div class="ch"><div class="ct">Nhân sự theo chi nhánh — trạng thái hôm nay <span class="src sa">Base HRM GPS<div class="tip">Base HRM cập nhật real-time từ check-in GPS. Không cần báo cáo thủ công từ chi nhánh</div></span></div></div>
       <table class="tbl">
-        <tr><th>Chi nhánh</th><th>Tổng</th><th>Đang làm</th><th>Nghỉ phép</th><th>Chưa check-in</th><th>OT tháng</th></tr>
-        <tr><td>Hà Nội (VP + Trụ sở)</td><td class="mono">42</td><td class="mono cg">39</td><td class="mono">1</td><td class="mono ca">2</td><td class="mono ca">142h</td></tr>
-        <tr><td>Hải Phòng</td><td class="mono">30</td><td class="mono cg">26</td><td class="mono">2</td><td class="mono ca">2</td><td class="mono cr">241h</td></tr>
-        <tr><td>TP. Hồ Chí Minh</td><td class="mono">20</td><td class="mono cg">18</td><td class="mono">1</td><td class="mono ca">1</td><td class="mono">29h</td></tr>
-        <tr><td>Việt Trì (Phú Thọ)</td><td class="mono">10</td><td class="mono cg">10</td><td class="mono">0</td><td class="mono cg">0</td><td class="mono">0h</td></tr>
-        <tr><td>Vĩnh Phúc (ICD)</td><td class="mono">5</td><td class="mono cg">5</td><td class="mono">0</td><td class="mono cg">0</td><td class="mono">0h</td></tr>
+        <tr><th></th><th>Chi nhánh</th><th>Tổng</th><th>Đang làm việc</th><th>Nghỉ phép</th><th>Chưa check-in</th><th>OT tháng</th></tr>
+        <tr class="expandable" onclick="toggleRow('br1')"><td></td><td>Hà Nội (VP + Trụ sở)</td><td class="mono">42</td><td class="mono cg">39</td><td class="mono">1</td><td class="mono ca">2</td><td class="mono ca">142h</td></tr>
+        <tr class="sub-row" id="br1"><td colspan="7">Bộ phận: Ops 12, Sales 8, Kho 6, Kế toán 5, Hành chính 4, Quản lý 7. 2 chưa check-in: Bình (Ops) và Hoàng (Kho). Anh Minh đang nghỉ phép.</td></tr>
+        <tr class="expandable" onclick="toggleRow('br2')"><td></td><td>Hải Phòng</td><td class="mono">30</td><td class="mono cg">26</td><td class="mono">2</td><td class="mono ca">2</td><td class="mono cr">241h</td></tr>
+        <tr class="sub-row" id="br2"><td colspan="7">OT cao nhất toàn hệ thống vì đây là chi nhánh có nhiều lô hàng cảng nhất. Cần xem xét tuyển thêm 2 nhân viên Ops để giảm tải. 241h OT/tháng là không bền vững.</td></tr>
+        <tr class="expandable" onclick="toggleRow('br3')"><td></td><td>TP. Hồ Chí Minh</td><td class="mono">20</td><td class="mono cg">18</td><td class="mono">1</td><td class="mono ca">1</td><td class="mono">29h</td></tr>
+        <tr class="sub-row" id="br3"><td colspan="7">Đang tuyển Trưởng VPĐD. 1 Sale chưa check-in (Đỗ Quang) đang có 2 RFQ chờ phản hồi. Chi nhánh HCM đang tăng trưởng tốt, cần bổ sung nhân sự Q2.</td></tr>
+        <tr class="expandable" onclick="toggleRow('br4')"><td></td><td>Việt Trì + Vĩnh Phúc</td><td class="mono">15</td><td class="mono cg">15</td><td class="mono">0</td><td class="mono cg">0</td><td class="mono">0h</td></tr>
+        <tr class="sub-row" id="br4"><td colspan="7">2 chi nhánh kho ICD. Toàn bộ 15 nhân viên đã check-in, không có OT, không có nghỉ phép. Vận hành ổn định. Công suất kho Vĩnh Phúc đang thấp (52%), cần chiến lược lấp đầy.</td></tr>
       </table>
-      <div style="margin-top:14px">
-        <div class="sl">Nhân viên chưa check-in — cần xác nhận ngay</div>
-        <table class="tbl">
-          <tr><th>Tên</th><th>Chi nhánh</th><th>Bộ phận</th><th>Đang phụ trách</th><th>Tác động</th></tr>
-          <tr><td>Nguyễn T. Bình</td><td>HN</td><td>Ops</td><td>4 lô hàng active</td><td><span class="b br">Cao</span></td></tr>
-          <tr><td>Lê Văn Hoàng</td><td>HN</td><td>Kho</td><td>Kiểm kê tồn kho</td><td><span class="b ba">Trung bình</span></td></tr>
-          <tr><td>Trần Minh</td><td>HP</td><td>Tài xế</td><td>3 chuyến sáng nay</td><td><span class="b br">Cao</span></td></tr>
-          <tr><td>Phạm Lan</td><td>HP</td><td>CS</td><td>Theo dõi 6 lô</td><td><span class="b ba">Trung bình</span></td></tr>
-          <tr><td>Đỗ Quang</td><td>HCM</td><td>Sale</td><td>2 RFQ cần phản hồi</td><td><span class="b ba">Trung bình</span></td></tr>
-        </table>
-      </div>
     </div>
     <div>
       <div class="card" style="margin-bottom:12px">
-        <div class="ch"><div class="ct">10 Vị trí đang tuyển <span class="src sa">Base HRM · Quản lý quy trình tuyển dụng</span></div></div>
+        <div class="ch"><div class="ct">10 Vị trí đang tuyển <span class="src sa">Base HRM<div class="tip">Base HRM quản lý pipeline tuyển dụng, tracking hồ sơ ứng viên</div></span></div></div>
         <table class="tbl">
-          <tr><th>Vị trí</th><th>Cấp bậc</th><th>Mức độ</th></tr>
-          <tr><td>Phó GĐ phụ trách Logistics</td><td>C-level</td><td><span class="b br">Rất cấp thiết</span></td></tr>
-          <tr><td>Kế toán trưởng</td><td>C-level</td><td><span class="b br">Rất cấp thiết</span></td></tr>
-          <tr><td>Trưởng phòng Sale Logistics</td><td>Trưởng phòng</td><td><span class="b br">Cấp thiết</span></td></tr>
-          <tr><td>Trưởng phòng Logistics</td><td>Trưởng phòng</td><td><span class="b ba">Cấp thiết</span></td></tr>
-          <tr><td>Trưởng VPĐD HCM</td><td>Trưởng phòng</td><td><span class="b ba">Cấp thiết</span></td></tr>
-          <tr><td>Kế toán tổng hợp + NV Logistics (×4)</td><td>Nhân viên</td><td><span class="b bb">Bình thường</span></td></tr>
+          <tr><th></th><th>Vị trí</th><th>Cấp bậc</th><th>Mức độ</th></tr>
+          <tr class="expandable" onclick="toggleRow('hr1')"><td></td><td>Phó GĐ phụ trách Logistics</td><td>C-level</td><td><span class="b br">Rất cấp thiết</span></td></tr>
+          <tr class="sub-row" id="hr1"><td colspan="4">Đang thiếu người điều phối vận hành giữa 5 chi nhánh. 2 tháng nay TGĐ đang kiêm nhiệm vai trò này. Ảnh hưởng trực tiếp đến chất lượng quyết định.</td></tr>
+          <tr class="expandable" onclick="toggleRow('hr2')"><td></td><td>Trưởng phòng Sale Logistics</td><td>Trưởng phòng</td><td><span class="b br">Cấp thiết</span></td></tr>
+          <tr class="sub-row" id="hr2"><td colspan="4">Tỷ lệ chuyển đổi giảm 8% kể từ khi thiếu Trưởng phòng Sales. Team Sales đang tự vận hành không có định hướng chiến lược.</td></tr>
+          <tr class="expandable" onclick="toggleRow('hr3')"><td></td><td>Kế toán trưởng</td><td>C-level</td><td><span class="b br">Rất cấp thiết</span></td></tr>
+          <tr class="sub-row" id="hr3"><td colspan="4">Hiện tại Kế toán tổng hợp đang kiêm nhiệm. Với quy mô 107 người và 5 chi nhánh, cần người có kinh nghiệm điều hành tài chính toàn tập đoàn.</td></tr>
+          <tr><td></td><td>NV Logistics HN (×2), HCM (×1)</td><td>Nhân viên</td><td><span class="b bb">Bình thường</span></td></tr>
+          <tr><td></td><td>Kế toán tổng hợp, Lái xe GĐ</td><td>Nhân viên</td><td><span class="b bb">Bình thường</span></td></tr>
         </table>
-        <div class="hl hla"><div class="hlt">FTC đang scale từ ~40 lên 60-70 người. Onboarding đồng loạt không có hệ thống HRM sẽ rất hỗn loạn — đây là thời điểm đúng để triển khai Base HRM.</div></div>
+        <div class="hl hla"><div class="hlt">Scale từ 40 lên 70 người mà không có hệ thống HRM sẽ rất hỗn loạn. Đây là thời điểm đúng để triển khai Base HRM.</div></div>
       </div>
       <div class="card">
-        <div class="ch"><div class="ct">Sức khỏe KH VIP <span class="src sa">Base CRM tự động · FTC cài công thức 1 lần</span></div></div>
+        <div class="ch"><div class="ct">Sức khỏe KH VIP <span class="src sa">Base CRM<div class="tip">Chỉ số = tần suất đặt hàng 90 ngày + số khiếu nại + tỷ lệ thanh toán đúng hạn. FTC cài công thức 1 lần, Base CRM tính tự động mãi mãi</div></span></div></div>
         <div class="pr"><div class="pn">Samsung SDI</div><div class="pb"><div class="pf" style="width:95%;background:var(--G)"></div></div><div class="pv cg">95/100</div></div>
         <div class="pr"><div class="pn">Lotte Chemical</div><div class="pb"><div class="pf" style="width:88%;background:var(--G)"></div></div><div class="pv cg">88/100</div></div>
         <div class="pr"><div class="pn">Hyundai MM</div><div class="pb"><div class="pf" style="width:42%;background:var(--R)"></div></div><div class="pv cr">42/100</div></div>
         <div class="pr"><div class="pn">Panasonic VN</div><div class="pb"><div class="pf" style="width:58%;background:var(--A)"></div></div><div class="pv ca">58/100</div></div>
         <div class="pr"><div class="pn">LG Innotek</div><div class="pb"><div class="pf" style="width:82%;background:var(--B)"></div></div><div class="pv cb">82/100</div></div>
-        <div class="hl hlb"><div class="hlt">Chỉ số = tần suất đặt hàng 90 ngày + số khiếu nại + tỷ lệ thanh toán đúng hạn. FTC cài công thức 1 lần, Base CRM tính tự động mãi mãi.</div></div>
+        <div class="hl hlb"><div class="hlt">Chỉ số = tần suất đặt hàng + số khiếu nại + tỷ lệ thanh toán. FTC cài công thức 1 lần, Base CRM tính tự động.</div></div>
       </div>
     </div>
   </div>
@@ -681,41 +1008,186 @@ body{background:var(--bg);color:var(--t1);font-family:var(--font);font-size:13px
 </div><!-- /main -->
 
 <div class="footer">
-  <div class="ft">FTC Logistics · Dashboard minh họa · Base.vn · 01/04/2026 · Dữ liệu mẫu — chưa phải dữ liệu thực của FTC</div>
+  <div class="ft">FTC Logistics · Dashboard minh họa · Base.vn · Dữ liệu mẫu — chưa phải dữ liệu thực của FTC · 01/04/2026</div>
   <div style="display:flex;align-items:center;gap:8px">
-    <div class="ft">Powered by</div>
-    <div class="basebadge">Base.vn</div>
+    <div class="ft">Powered by</div><div class="basebadge">Base.vn</div>
   </div>
 </div>
 
 <script>
-function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('vi-VN')}
+/* Clock */
+function tick(){
+  const n=new Date();
+  document.getElementById('clock').textContent=n.toLocaleTimeString('vi-VN');
+}
 tick();setInterval(tick,1000);
+
+/* Tab switch */
 function show(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
 }
-Chart.defaults.color='#7a8fa8';Chart.defaults.borderColor='rgba(0,0,0,0.06)';
-Chart.defaults.font.family="'Be Vietnam Pro',sans-serif";Chart.defaults.font.size=11;
+
+/* Metric card expand */
+function toggleExpand(id){
+  const el=document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+/* Table row expand */
+function toggleRow(id){
+  const sub=document.getElementById(id);
+  const row=sub.previousElementSibling;
+  sub.classList.toggle('show');
+  row.classList.toggle('open');
+}
+
+/* Alert expand */
+function toggleAlert(el){
+  const d=el.querySelector('.ar-detail');
+  if(d) d.classList.toggle('show');
+}
+
+/* Risk item expand */
+function toggleRisk(el){
+  const d=el.querySelector('.ri-sub');
+  if(d) d.classList.toggle('show');
+}
+
+/* Time filter */
+const timeLabels={'today':'Hôm nay 01/04/2026','week':'Tuần 14 (31/03 - 06/04)','month':'Tháng 4/2026','q2':'Quý 2/2026','ytd':'Cả năm 2026'};
+let activeTime='month',activeBU='Tất cả chi nhánh',activeSvc='Tất cả dịch vụ';
+
+function setTime(btn,key){
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activeTime=key;
+  updateSummary();
+}
+function applyBU(val){
+  const labels={'all':'Tất cả chi nhánh','hn':'Hà Nội','hp':'Hải Phòng','hcm':'TP.HCM','vt':'Việt Trì','vp':'Vĩnh Phúc'};
+  activeBU=labels[val];
+  updateSummary();
+}
+function applySvc(val){
+  const labels={'all':'Tất cả dịch vụ','fwd':'Forwarder','icd':'Kho ICD','xd':'Xây dựng','dai-ly':'Đại lý tàu biển'};
+  activeSvc=labels[val];
+  updateSummary();
+}
+function updateSummary(){
+  document.getElementById('filter-summary').textContent=`Đang xem: ${timeLabels[activeTime]} · ${activeBU} · ${activeSvc}`;
+}
+
+/* Chart defaults */
+Chart.defaults.color='#7a8fa8';
+Chart.defaults.borderColor='rgba(0,0,0,0.06)';
+Chart.defaults.font.family="'Be Vietnam Pro',sans-serif";
+Chart.defaults.font.size=11;
+
 const G='#1a7a3c',GM='#2d9e55',GL='rgba(26,122,60,0.12)';
-const B='#1565c0',BM='#1976d2',BL='rgba(21,101,192,0.12)';
-const R='#d32f2f',RL='rgba(211,47,47,0.1)';
+const B='#1565c0',BL='rgba(21,101,192,0.12)';
+const R='#c62828',RL='rgba(198,40,40,0.1)';
 const A='#e65100',AL='rgba(230,81,0,0.1)';
 
-new Chart(document.getElementById('c-rev'),{type:'bar',data:{labels:['T11','T12','T1','T2','T3','T4*'],datasets:[{label:'Forwarder',data:[2100,2300,1900,2400,2600,2604],backgroundColor:'rgba(21,101,192,0.7)',stack:'s'},{label:'Kho ICD',data:[780,820,700,880,940,1008],backgroundColor:'rgba(26,122,60,0.7)',stack:'s'},{label:'Xây dựng',data:[320,410,280,380,420,588],backgroundColor:'rgba(120,144,156,0.5)',stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:10,usePointStyle:true}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:v=>v>=1000?(v/1000).toFixed(1)+'tỷ':v+'tr'}}}}});
+/* Revenue stacked bar */
+new Chart(document.getElementById('c-rev'),{
+  type:'bar',
+  data:{
+    labels:['T11','T12','T1','T2','T3','T4*'],
+    datasets:[
+      {label:'Forwarder',data:[2100,2300,1900,2400,2600,2604],backgroundColor:'rgba(21,101,192,0.7)',stack:'s'},
+      {label:'Kho ICD',  data:[780,820,700,880,940,1008],backgroundColor:'rgba(26,122,60,0.7)',stack:'s'},
+      {label:'Xây dựng', data:[320,410,280,380,420,588],backgroundColor:'rgba(120,144,156,0.45)',stack:'s'},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:10,usePointStyle:true}}},
+    scales:{
+      x:{stacked:true,grid:{display:false}},
+      y:{stacked:true,ticks:{callback:v=>v>=1000?(v/1000).toFixed(1)+'tỷ':v+'tr'}}
+    }
+  }
+});
 
-new Chart(document.getElementById('c-dem'),{type:'bar',data:{labels:['T9','T10','T11','T12','T1','T2','T3'],datasets:[{label:'DEM/DET (tr)',data:[42,38,55,71,68,71,87],backgroundColor:ctx=>ctx.raw>70?'rgba(211,47,47,0.75)':ctx.raw>55?'rgba(230,81,0,0.65)':'rgba(21,101,192,0.5)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>v+'tr'}}}}});
+/* DEM/DET bar */
+new Chart(document.getElementById('c-dem'),{
+  type:'bar',
+  data:{
+    labels:['T9','T10','T11','T12','T1','T2','T3'],
+    datasets:[{
+      label:'DEM/DET (tr)',
+      data:[42,38,55,71,68,71,87],
+      backgroundColor:ctx=>ctx.raw>70?'rgba(198,40,40,0.75)':ctx.raw>55?'rgba(230,81,0,0.65)':'rgba(21,101,192,0.5)',
+      borderRadius:4,
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>v+'tr'}}}
+  }
+});
 
-new Chart(document.getElementById('c-pnl'),{type:'bar',data:{labels:['T11','T12','T1','T2','T3','T4*'],datasets:[{label:'Doanh thu',data:[3200,3530,2880,3660,3960,4200],backgroundColor:'rgba(21,101,192,0.55)',borderRadius:4,yAxisID:'y'},{label:'LN gộp',data:[384,459,317,476,475,630],backgroundColor:'rgba(26,122,60,0.7)',borderRadius:4,yAxisID:'y'},{label:'Biên LN(%)',data:[12,13,11,13,12,15],type:'line',borderColor:A,backgroundColor:AL,pointRadius:4,fill:true,yAxisID:'y2',tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:10,usePointStyle:true}}},scales:{x:{grid:{display:false}},y:{position:'left',ticks:{callback:v=>v>=1000?(v/1000).toFixed(1)+'tỷ':v+'tr'}},y2:{position:'right',grid:{drawOnChartArea:false},ticks:{callback:v=>v+'%'}}}}});
+/* P&L combo */
+new Chart(document.getElementById('c-pnl'),{
+  type:'bar',
+  data:{
+    labels:['T11','T12','T1','T2','T3','T4*'],
+    datasets:[
+      {label:'Doanh thu',data:[3200,3530,2880,3660,3960,4200],backgroundColor:'rgba(21,101,192,0.55)',borderRadius:4,yAxisID:'y'},
+      {label:'LN gộp',   data:[384,459,317,476,475,630],backgroundColor:'rgba(26,122,60,0.75)',borderRadius:4,yAxisID:'y'},
+      {label:'Biên LN(%)',data:[12,13,11,13,12,15],type:'line',borderColor:A,backgroundColor:AL,pointRadius:4,fill:true,yAxisID:'y2',tension:0.4}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:10,usePointStyle:true}}},
+    scales:{
+      x:{grid:{display:false}},
+      y:{position:'left',ticks:{callback:v=>v>=1000?(v/1000).toFixed(1)+'tỷ':v+'tr'}},
+      y2:{position:'right',grid:{drawOnChartArea:false},ticks:{callback:v=>v+'%'}}
+    }
+  }
+});
 
-new Chart(document.getElementById('c-cost'),{type:'line',data:{labels:['T10','T11','T12','T1','T2','T3'],datasets:[{label:'DEM/DET',data:[38,55,71,68,71,87],borderColor:R,backgroundColor:RL,fill:true,tension:0.4,pointRadius:4},{label:'OT nhân sự',data:[14,16,19,15,17,18.5],borderColor:A,backgroundColor:AL,fill:true,tension:0.4,pointRadius:4},{label:'Chi phí rework',data:[6,9,11,8,10,12.3],borderColor:B,backgroundColor:BL,fill:true,tension:0.4,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:10,usePointStyle:true}}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>v+'tr'}}}}});
+/* Cost line */
+new Chart(document.getElementById('c-cost'),{
+  type:'line',
+  data:{
+    labels:['T10','T11','T12','T1','T2','T3'],
+    datasets:[
+      {label:'DEM/DET',      data:[38,55,71,68,71,87],borderColor:R,backgroundColor:RL,fill:true,tension:0.4,pointRadius:4},
+      {label:'OT nhân sự',   data:[14,16,19,15,17,18.5],borderColor:A,backgroundColor:AL,fill:true,tension:0.4,pointRadius:4},
+      {label:'Chi phí rework',data:[6,9,11,8,10,12.3],borderColor:B,backgroundColor:BL,fill:true,tension:0.4,pointRadius:4},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,position:'top',labels:{boxWidth:10,padding:10,usePointStyle:true}}},
+    scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>v+'tr'}}}
+  }
+});
 
-new Chart(document.getElementById('c-wh'),{type:'bar',data:{labels:['Kho HP thường','Kho HP ngoại quan','Kho Vĩnh Phúc','Kho Việt Trì HC'],datasets:[{label:'Công suất(%)',data:[87,78,52,65],backgroundColor:['rgba(230,81,0,0.7)','rgba(26,122,60,0.7)','rgba(211,47,47,0.7)','rgba(230,81,0,0.5)'],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{max:100,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});
-
-new Chart(document.getElementById('c-unp'),{type:'bar',data:{labels:['T10','T11','T12','T1','T2','T3'],datasets:[{label:'CP ngoài KH (tr)',data:[68,92,118,84,95,94],backgroundColor:'rgba(230,81,0,0.6)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>v+'tr'}}}}});
-
-new Chart(document.getElementById('c-radar'),{type:'radar',data:{labels:['Tuân thủ QT','Deadline nội bộ','Cập nhật HT','Phối hợp BP','Báo cáo đúng hạn'],datasets:[{label:'Hà Nội',data:[96,92,90,88,94],borderColor:G,backgroundColor:'rgba(26,122,60,0.1)',pointRadius:3},{label:'Hải Phòng',data:[83,78,80,72,76],borderColor:A,backgroundColor:'rgba(230,81,0,0.08)',pointRadius:3},{label:'TP.HCM',data:[76,68,72,65,70],borderColor:R,backgroundColor:'rgba(211,47,47,0.08)',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{boxWidth:8,padding:10,usePointStyle:true}}},scales:{r:{min:50,max:100,ticks:{display:false},grid:{color:'rgba(0,0,0,0.06)'},pointLabels:{font:{size:10},color:'#7a8fa8'}}}}});
+/* Radar */
+new Chart(document.getElementById('c-radar'),{
+  type:'radar',
+  data:{
+    labels:['Tuân thủ QT','Deadline nội bộ','Cập nhật HT','Phối hợp BP','Báo cáo đúng hạn'],
+    datasets:[
+      {label:'Hà Nội',   data:[96,92,90,88,94],borderColor:G,backgroundColor:'rgba(26,122,60,0.1)',pointRadius:3},
+      {label:'Hải Phòng',data:[83,78,80,72,76],borderColor:A,backgroundColor:'rgba(230,81,0,0.08)',pointRadius:3},
+      {label:'TP.HCM',   data:[76,68,72,65,70],borderColor:R,backgroundColor:'rgba(198,40,40,0.08)',pointRadius:3},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:true,position:'top',labels:{boxWidth:8,padding:10,usePointStyle:true}}},
+    scales:{r:{min:50,max:100,ticks:{display:false},grid:{color:'rgba(0,0,0,0.06)'},pointLabels:{font:{size:10},color:'#7a8fa8'}}}
+  }
+});
 </script>
 </body>
 </html>
